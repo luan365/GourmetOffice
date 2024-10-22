@@ -1,5 +1,19 @@
 ﻿# GourmetOffice
 
+Repositório do **Grupo 8** do projeto integrador 4.
+
+**Integrantes do grupo:**
+
+-*Vitor Hugo Amaro Aristides, RA: 20018040*
+
+-*Bruno Tasso Savoia, RA:22000354*
+
+-*João Pedro Simões Serra, RA:19072362*
+
+-*Ryan Matheus moreira Barbosa, RA:22900872*
+
+-*Luan de Campos Ferreira, RA:23005247*
+
 ## Como instalar dependências e rodar o programa (por enquanto)
 -*Instalar o yarn*
 
