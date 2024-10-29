@@ -1,18 +1,13 @@
-// main.jsx
-import { StrictMode } from 'react';
-import { createRoot } from 'react-dom/client';
-import TelaLogin from './TelaLogin.jsx';
-import './main.css';
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import App from './App.jsx'
+import './index.css'
+import {BrowserRouter} from "react-router-dom";
 
-// Se quiser usar uma imagem, pode definir aqui
-const backgroundImage = 'path/to/your/image.png';
-//const backgroundColor = cor
-
-
-//se quiser cor no lugar de imagem, so colocar "<App backgroundColor={backgroundColor} />"
-createRoot(document.getElementById('root')).render(
-  <StrictMode>
-
-    <TelaLogin backgroundImage={backgroundImage} />
-  </StrictMode>,
-);
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </React.StrictMode>
+)
