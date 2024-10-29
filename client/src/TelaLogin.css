@@ -1,0 +1,53 @@
+/* App.css */
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    width: 100%; /* Adiciona 100% de largura para garantir que não haja scroll horizontal */
+    overflow-x: hidden; /* Esconde qualquer possível transbordo na largura */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f5f5f5;
+  }
+  
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100vw; /* Garante que o container ocupe toda a largura da viewport */
+    height: 100vh; /* Garante que o container ocupe toda a altura da viewport */
+    background-size: cover;
+    background-position: center;
+  }
+  
+  .image {
+    width: 150px;
+    height: 150px;
+    background-color: #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    border: 1px solid #000;
+  }
+  
+  .input {
+    width: 300px;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #000;
+    border-radius: 4px;
+  }
+  
+  .button {
+    padding: 10px;
+    width: 150px;
+    border: 1px solid #000;
+    border-radius: 4px;
+    background-color: #fff;
+    cursor: pointer;
+  }
+  
