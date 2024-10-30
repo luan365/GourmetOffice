@@ -17,10 +17,12 @@ Repositório do **Grupo 8** do projeto integrador 4.
 ## Como instalar dependências e rodar o programa (por enquanto)
 - *Instalar o yarn*
 
-- *Abrir projeto pelo VsCode, digitar no terminal "cd client"*
+### Iniciando o front-end
 
-- *Digitar "yarn" no terminal para instalar dependências do yarn*
+- *Executar o comando "yarn" no diretório "client" para instalar dependências do yarn*
 
 - *Digitar "yarn dev" no temrinal e clickar no link localhost*
 
-- *Executar "Servidor.java" e "Cliente.java" nas pastas com os respectivos nomes dentro da pasta "ServerJava"
+### Iniciando o servidor java
+
+- *Executar "Servidorpi4Application.java" que está no diretório "GourmetOffice\ServidorJava\src\main\java\puc\pi4\servidorpi4" para iniciar o servidor
