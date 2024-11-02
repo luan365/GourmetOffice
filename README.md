@@ -21,6 +21,11 @@ Repositório do **Grupo 8** do projeto integrador 4.
 - Maven para gerenciar dependencias no servidor/backend
 
 ## Como instalar dependências e rodar o programa (por enquanto)
+
+***IMPORTANTE***
+
+- *Criar um arquivo "db.properties" no diretório "GourmetOffice\serverjava\src\main\resources\db.properties" com campos "db_user" e "db_password"*
+
 - *Instalar o yarn*
 
 - *instalar maven* (opcional)
@@ -33,4 +38,4 @@ Repositório do **Grupo 8** do projeto integrador 4.
 
 ### Iniciando o servidor java
 
-- *Executar "ServerJava.java" que está no diretório "C:\Users\bruno\Desktop\GourmetOffice\serverjava\src\main\java\puc\pi4\" para iniciar o servidor*
+- *Executar "ServerJava.java" que está no diretório "GourmetOffice\serverjava\src\main\java\puc\pi4\" para iniciar o servidor*
