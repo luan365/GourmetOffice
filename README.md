@@ -14,8 +14,16 @@ Repositório do **Grupo 8** do projeto integrador 4.
 
 - *Luan de Campos Ferreira, RA:23005247*
 
+## Ferramentas utilizadas
+
+- Yarn para gerenciar dependencias no front-end
+
+- Maven para gerenciar dependencias no servidor/backend
+
 ## Como instalar dependências e rodar o programa (por enquanto)
 - *Instalar o yarn*
+
+- *instalar maven* (opcional)
 
 ### Iniciando o front-end
 
@@ -25,4 +33,4 @@ Repositório do **Grupo 8** do projeto integrador 4.
 
 ### Iniciando o servidor java
 
-- *Executar "Servidorpi4Application.java" que está no diretório "GourmetOffice\ServidorJava\src\main\java\puc\pi4\servidorpi4" para iniciar o servidor
+- *Executar "ServerJava.java" que está no diretório "C:\Users\bruno\Desktop\GourmetOffice\serverjava\src\main\java\puc\pi4\" para iniciar o servidor*
