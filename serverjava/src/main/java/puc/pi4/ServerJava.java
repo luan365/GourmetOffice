@@ -15,7 +15,7 @@ public class ServerJava {
             System.out.println("Servidor HTTP iniciado na porta 8080...");
 
             // Registrando o controlador para os endpoints de /api/people
-            server.createContext("/api/people", new Controller());
+            server.createContext("/", new Controller());
             server.setExecutor(null);
             server.start();
 
