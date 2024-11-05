@@ -41,7 +41,7 @@ public class EmpresaOperations {
         } 
         
     public  List<Empresa> getAllEmpresas() {
-        System.out.println("Funcao buscar iniciada");
+        
         List<Empresa> empresas = new ArrayList<>();
 
         for (Document doc : collection.find()) {
@@ -68,7 +68,7 @@ public class EmpresaOperations {
         Document doc = Document.parse(json);
         collection.insertOne(doc);
 
-        System.out.println(doc.toJson());
+        
         return x;
 
     }
@@ -83,7 +83,7 @@ public class EmpresaOperations {
 
         Document updateDoc = new Document("$set",doc);
 
-        System.out.println(updateDoc);
+        
 
         try {
             collection.findOneAndUpdate(filter, updateDoc, new FindOneAndUpdateOptions());
@@ -99,7 +99,7 @@ public class EmpresaOperations {
     }
 
     public Empresa deleteEmpresa(String cnpj){
-        System.out.println("tentando deletar empresa"+cnpj);
+        
 
         Document filter = new Document("cnpj", cnpj);
 
@@ -114,7 +114,7 @@ public class EmpresaOperations {
         if (empresaDeletada != null) {
             // Converte o Document de volta para um objeto Empresa
             Gson gson = new Gson();
-            System.out.println("objeto deletado"+empresaDeletada);
+            
 
             return gson.fromJson(empresaDeletada.toJson(), Empresa.class);
         } else {
