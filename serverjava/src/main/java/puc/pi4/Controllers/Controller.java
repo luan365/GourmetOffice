@@ -96,9 +96,33 @@ public class Controller implements HttpHandler {
 
         if("DELETE".equals(method)){
             switch(path){
+                
+                case "/deleteEmpresa":
+                
+                try(InputStreamReader reader = new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8)) {
+                    String cnpj =gson.fromJson(reader, String.class);
+                    Empresa deletedEmpresa = empresaOperations.deleteEmpresa(cnpj);
+                
+                    if (deletedEmpresa != null) {
+                        response = gson.toJson(deletedEmpresa);
+                        exchange.sendResponseHeaders(200, response.getBytes(StandardCharsets.UTF_8).length);
+                    } else {
+                        // Retorna erro se nenhuma empresa foi encontrada com o CNPJ fornecido
+                        response = gson.toJson("Empresa com CNPJ " + cnpj + " não encontrada.");
+                        exchange.sendResponseHeaders(404, response.getBytes(StandardCharsets.UTF_8).length);
+                    }
+                
+                
+                } catch (Exception e) {
+                    System.err.println("Erro ao receber cnpj"+e);
+                    e.printStackTrace();
+            response = gson.toJson("Erro ao processar a solicitação de exclusão.");
+            exchange.sendResponseHeaders(400, response.getBytes(StandardCharsets.UTF_8).length);
+                }
+
                 case "/deleteCozinha":
 
-                case "/deleteEmpresa":
+                
 
             }
         }

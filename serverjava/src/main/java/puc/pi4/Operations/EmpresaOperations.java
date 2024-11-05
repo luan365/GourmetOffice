@@ -98,6 +98,32 @@ public class EmpresaOperations {
 
     }
 
+    public Empresa deleteEmpresa(String cnpj){
+        System.out.println("tentando deletar empresa"+cnpj);
+
+        Document filter = new Document("cnpj", cnpj);
+
+        Document empresaDeletada = null;
+
+        try {
+            empresaDeletada = collection.findOneAndDelete(filter);
+        } catch (Exception e) {
+            System.err.println("Erro ao deletar mongo" + e);
+        }
+
+        if (empresaDeletada != null) {
+            // Converte o Document de volta para um objeto Empresa
+            Gson gson = new Gson();
+            System.out.println("objeto deletado"+empresaDeletada);
+
+            return gson.fromJson(empresaDeletada.toJson(), Empresa.class);
+        } else {
+            System.out.println("Nenhuma empresa encontrada com o CNPJ fornecido.");
+            return null; // Retorna null caso não encontre o documento
+        }
+
+    }
+
 
 
 }
