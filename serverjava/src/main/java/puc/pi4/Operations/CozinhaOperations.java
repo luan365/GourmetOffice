@@ -8,19 +8,19 @@ import java.util.Properties;
 
 import org.bson.Document;
 
+import com.google.gson.Gson;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
-import puc.pi4.Entities.Person;
+import puc.pi4.Entities.Cozinha;
 
-public class PersonOperations {
+public class CozinhaOperations {
     private MongoCollection<Document> collection;
-
-    public PersonOperations() {
-
-        try {
+    
+    public CozinhaOperations(){
+                try {
             Properties prop = new Properties();
             prop.load(new FileInputStream("serverjava/src/main/resources/db.properties"));
             String user = prop.getProperty("db_user");
@@ -30,33 +30,48 @@ public class PersonOperations {
 
             // Conectando ao MongoDB Atlas
             MongoClient mongoClient = MongoClients.create("mongodb+srv://bruno:123456qwerty@gourmetoffice.fnzzv.mongodb.net/");
-            MongoDatabase database = mongoClient.getDatabase("person");
-            this.collection = database.getCollection("people");
+            MongoDatabase database = mongoClient.getDatabase("GourmetOffice");
+            this.collection = database.getCollection("Cozinhas");
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    // Listar todas as pessoas
-    public List<Person> getAllPersons() {
-        List<Person> persons = new ArrayList<>();
+    public  List<Cozinha> getAllCozinhas() {
+        System.out.println("Funcao buscar iniciada");
+        List<Cozinha> cozinhas = new ArrayList<>();
+
         for (Document doc : collection.find()) {
-            Person person = new Person();
-            person.setId(doc.getObjectId("_id"));
-            person.setName(doc.getString("name"));
-            person.setAge(doc.getInteger("age"));
-            persons.add(person);
-        }
-        return persons;
+                
+
+            Cozinha cozinha = new Cozinha(doc.getString("nome"),
+            doc.getString("cnpj"),
+            doc.getString("email"),
+            doc.getString("senha"),
+            doc.getString("telefone"),
+            doc.getString("endereco"));
+
+            cozinhas.add(cozinha);
+
+    }
+        
+        return cozinhas;
     }
 
-    // Adicionar uma nova pessoa
-    public Person addPerson(Person person) {
-        Document doc = new Document("name", person.getName())
-                              .append("age", person.getAge());
+    public Cozinha insertCozinha(Cozinha x){
+
+        Gson gson = new Gson();
+        String json = gson.toJson(x);
+
+        Document doc = Document.parse(json);
         collection.insertOne(doc);
-        person.setId(doc.getObjectId("_id"));
-        return person;
+
+        System.out.println(doc.toJson());
+        return x;
+
     }
+
+
+
 }
