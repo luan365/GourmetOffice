@@ -1,3 +1,5 @@
+//Controla todas as requisições HTTP
+
 package puc.pi4.Controllers;
 
 
@@ -67,6 +69,39 @@ public class Controller implements HttpHandler {
                
         }
 
+        if("PATCH".equals(method)){
+            switch(path){
+                case "/updateEmpresa":
+                System.out.println("Estou atualizando empresa");
+                Empresa empresaAtualizada = gson.fromJson(new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8), Empresa.class);
+                String cnpjEmpresa = empresaAtualizada.getCNPJ();
+                System.out.println(cnpjEmpresa);
+
+                Empresa empresaUpdate = empresaOperations.updateEmpresa(empresaAtualizada, cnpjEmpresa);
+                response = gson.toJson(empresaUpdate);
+                exchange.sendResponseHeaders(201, response.getBytes(StandardCharsets.UTF_8).length);
+
+                case "/updateCozinha":
+                System.out.println("Estou atualizando cozinha");
+                Cozinha cozinhaAtualizada = gson.fromJson(new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8), Cozinha.class);
+                String cnpjCozinha = cozinhaAtualizada.getCNPJ();
+                System.out.println(cnpjCozinha);
+
+                Cozinha cozinhaUpdate = cozinhaOperations.updateCozinha(cozinhaAtualizada, cnpjCozinha);
+                response = gson.toJson(cozinhaUpdate);
+                exchange.sendResponseHeaders(201, response.getBytes(StandardCharsets.UTF_8).length);
+
+            }
+        }
+
+        if("DELETE".equals(method)){
+            switch(path){
+                case "/deleteCozinha":
+
+                case "/deleteEmpresa":
+
+            }
+        }
        
 
 

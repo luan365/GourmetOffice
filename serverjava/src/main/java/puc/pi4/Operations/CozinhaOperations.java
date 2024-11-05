@@ -13,8 +13,10 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.FindOneAndUpdateOptions;
 
 import puc.pi4.Entities.Cozinha;
+import puc.pi4.Entities.Empresa;
 
 public class CozinhaOperations {
     private MongoCollection<Document> collection;
@@ -72,6 +74,30 @@ public class CozinhaOperations {
 
     }
 
+        public Cozinha updateCozinha(Cozinha x, String cnpj){
+        Gson gson = new Gson();
+        String json = gson.toJson(x);
+
+        Document filter = new Document("cnpj", cnpj);
+
+        Document doc = Document.parse(json);
+
+        Document updateDoc = new Document("$set",doc);
+
+        System.out.println(updateDoc);
+
+        try {
+            collection.findOneAndUpdate(filter, updateDoc, new FindOneAndUpdateOptions());
+        } catch (Exception e) {
+            System.err.println("Erro ao atualizar" + e);
+        }
+        
+
+        return x;
+
+
+
+    }
 
 
 }

@@ -13,6 +13,7 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.FindOneAndUpdateOptions;
 
 import puc.pi4.Entities.Empresa;
 
@@ -39,21 +40,20 @@ public class EmpresaOperations {
             }
         } 
         
-        public  List<Empresa> getAllEmpresas() {
-            System.out.println("Funcao buscar iniciada");
-            List<Empresa> empresas = new ArrayList<>();
+    public  List<Empresa> getAllEmpresas() {
+        System.out.println("Funcao buscar iniciada");
+        List<Empresa> empresas = new ArrayList<>();
 
-            for (Document doc : collection.find()) {
+        for (Document doc : collection.find()) {
                 
 
-                Empresa empresa = new Empresa(doc.getString("nome"),
-                doc.getString("cnpj"),
-                doc.getString("email"),
-                doc.getString("senha"),
-                doc.getString("telefone"),
-                doc.getString("endereco"));
-
-                empresas.add(empresa);
+            Empresa empresa = new Empresa(doc.getString("nome"),
+            doc.getString("cnpj"),
+            doc.getString("email"),
+            doc.getString("senha"),
+            doc.getString("telefone"),
+            doc.getString("endereco"));
+            empresas.add(empresa);
 
         }
         
@@ -70,6 +70,31 @@ public class EmpresaOperations {
 
         System.out.println(doc.toJson());
         return x;
+
+    }
+
+    public Empresa updateEmpresa(Empresa x, String cnpj){
+        Gson gson = new Gson();
+        String json = gson.toJson(x);
+
+        Document filter = new Document("cnpj", cnpj);
+
+        Document doc = Document.parse(json);
+
+        Document updateDoc = new Document("$set",doc);
+
+        System.out.println(updateDoc);
+
+        try {
+            collection.findOneAndUpdate(filter, updateDoc, new FindOneAndUpdateOptions());
+        } catch (Exception e) {
+            System.err.println("Erro ao atualizar" + e);
+        }
+        
+
+        return x;
+
+
 
     }
 

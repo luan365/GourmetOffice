@@ -16,4 +16,8 @@ public class Cozinha {
         this.telefone = telefone;
         this.endereco = endereco;
     }
+
+    public String getCNPJ(){
+        return this.cnpj;
+    }
 }
