@@ -30,28 +30,29 @@ public class Controller implements HttpHandler {
 
         System.out.println("MÉTODO CHAMADO " + method);
 
+        System.out.println("CAMINHO : "+path);
+
 
         //Switch getter ->
         if("GET".equals(method)){
 
-            switch(path){
-                case "/getAllEmpresas":
-                    try {
-                        List<Empresa> empresas = empresaOperations.getAllEmpresas();
-                        response = gson.toJson(empresas);
-                        
-                        exchange.sendResponseHeaders(200, response.getBytes(StandardCharsets.UTF_8).length);
-                    } catch (Exception e) {
-                        System.err.println("Erro ao buscar todas empresas " + e);
-                        e.printStackTrace();
-                        response = gson.toJson("Erro ao processar a solicitação.");
-                        exchange.sendResponseHeaders(400, response.getBytes(StandardCharsets.UTF_8).length);
-                    }
+            if("/getAllEmpresas".equals(path)){
+                try {
+                    List<Empresa> empresas = empresaOperations.getAllEmpresas();
+                    response = gson.toJson(empresas);
+                    
+                    exchange.sendResponseHeaders(200, response.getBytes(StandardCharsets.UTF_8).length);
+                } catch (Exception e) {
+                    System.err.println("Erro ao buscar todas empresas " + e);
+                    e.printStackTrace();
+                    response = gson.toJson("Erro ao processar a solicitação.");
+                    exchange.sendResponseHeaders(400, response.getBytes(StandardCharsets.UTF_8).length);
+                }
+            }
 
-
-               
-                case "/getAllCozinhas":
-                    try {
+            
+            if("/getAllCozinhas".equals(path)){
+                try {
                         
                     List<Cozinha> cozinhas = cozinhaOperations.getAllCozinhas();
                     response = gson.toJson(cozinhas);
@@ -63,30 +64,32 @@ public class Controller implements HttpHandler {
                         response = gson.toJson("Erro ao processar a solicitação.");
                         exchange.sendResponseHeaders(400, response.getBytes(StandardCharsets.UTF_8).length);
                     }
-    
             }
         }
         
          //Switch Insert ->
         if("PUT".equals(method)){
-            switch(path){
-                case "/insertEmpresa":
-                    try {    
-                    Empresa empresa = gson.fromJson(new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8), Empresa.class);
-                    Empresa addedEmpresa = empresaOperations.insertEmpresa(empresa);
-                    response = gson.toJson(addedEmpresa);
-                    exchange.sendResponseHeaders(201, response.getBytes(StandardCharsets.UTF_8).length);
-                    } catch (Exception e) {
-                        System.err.println("Erro ao inserir empresa "+e);
-                        e.printStackTrace();
-                        response = gson.toJson("Erro ao processar a solicitação.");
-                        exchange.sendResponseHeaders(400, response.getBytes(StandardCharsets.UTF_8).length);
 
-                    }
+            if("/insertEmpresa".equals(path)){
+                System.out.println("INSERINDO EMPRESA");
+                try {    
+                Empresa empresa = gson.fromJson(new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8), Empresa.class);
+                Empresa addedEmpresa = empresaOperations.insertEmpresa(empresa);
+                response = gson.toJson(addedEmpresa);
+                exchange.sendResponseHeaders(201, response.getBytes(StandardCharsets.UTF_8).length);
+                } catch (Exception e) {
+                    System.err.println("Erro ao inserir empresa "+e);
+                    e.printStackTrace();
+                    response = gson.toJson("Erro ao processar a solicitação.");
+                    exchange.sendResponseHeaders(400, response.getBytes(StandardCharsets.UTF_8).length);
 
-    
-                case "/insertCozinha":
-                    try {   
+                }
+            }
+
+            
+            if("/insertCozinha".equals(path)){
+                System.out.println("INSERINDO COZINHA");
+                try {   
                     Cozinha cozinha = gson.fromJson(new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8), Cozinha.class);
                     Cozinha addedCozinha = cozinhaOperations.insertCozinha(cozinha);
                     response = gson.toJson(addedCozinha);
@@ -102,9 +105,9 @@ public class Controller implements HttpHandler {
         }
 
         if("PATCH".equals(method)){
-            switch(path){
-                case "/updateEmpresa":
-                    try {
+
+            if("updateEmpresa".equals(path)){
+                try {
                             
                     
                     Empresa empresaAtualizada = gson.fromJson(new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8), Empresa.class);
@@ -120,10 +123,11 @@ public class Controller implements HttpHandler {
                         response = gson.toJson("Erro ao processar a solicitação.");
                         exchange.sendResponseHeaders(400, response.getBytes(StandardCharsets.UTF_8).length);
                     }
+            }
 
-
-                case "/updateCozinha":
-                    try {
+            
+            if("updateCozinha".equals(path)){
+                try {
                             
                     
                     Cozinha cozinhaAtualizada = gson.fromJson(new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8), Cozinha.class);
@@ -138,16 +142,13 @@ public class Controller implements HttpHandler {
                         e.printStackTrace();
                         response = gson.toJson("Erro ao processar a solicitação.");
                         exchange.sendResponseHeaders(400, response.getBytes(StandardCharsets.UTF_8).length);
-                    }
-
+                    }                
             }
         }
 
         if("DELETE".equals(method)){
-            switch(path){
-                
-                case "/deleteEmpresa":
-                
+
+            if("/deleteEmpresa".equals(path)){
                 try(InputStreamReader reader = new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8)) {
                     String cnpj =gson.fromJson(reader, String.class);
                     Empresa deletedEmpresa = empresaOperations.deleteEmpresa(cnpj);
@@ -168,11 +169,11 @@ public class Controller implements HttpHandler {
                     response = gson.toJson("Erro ao processar a solicitação.");
                     exchange.sendResponseHeaders(400, response.getBytes(StandardCharsets.UTF_8).length);
                 }
+            }
 
-                case "/deleteCozinha":
-
+            
+            if("/deleteCozinha".equals(path)){
                 
-
             }
         }
        
