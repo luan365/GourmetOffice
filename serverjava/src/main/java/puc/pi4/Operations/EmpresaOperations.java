@@ -44,6 +44,7 @@ public class EmpresaOperations {
         
         List<Empresa> empresas = new ArrayList<>();
 
+
         for (Document doc : collection.find()) {
                 
 
@@ -60,6 +61,26 @@ public class EmpresaOperations {
         return empresas;
     }
 
+    public List<Empresa> login(String email, String senha){
+        List<Empresa> empresas = new ArrayList<>();
+        
+        Document filter = new Document("email",email).append("senha",senha);//O método append que você está vendo no código serve para adicionar novos pares chave-valor a um Document no MongoDB.
+
+        Document doc  = collection.find(filter).first();// Tentando encontrar o primeiro documento que corresponde ao filtro
+
+        if (doc != null) {
+            Empresa empresa = new Empresa(doc.getString("nome"),
+                                          doc.getString("cnpj"),
+                                          doc.getString("email"),
+                                          doc.getString("senha"),
+                                          doc.getString("telefone"),
+                                          doc.getString("endereco"));
+            
+            empresas.add(empresa);
+        }
+        return empresas;
+    }
+
     public Empresa insertEmpresa(Empresa x){
 
         Gson gson = new Gson();
@@ -70,7 +91,7 @@ public class EmpresaOperations {
 
         
         return x;
-
+ 
     }
 
     public Empresa updateEmpresa(Empresa x, String cnpj){

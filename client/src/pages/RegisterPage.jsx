@@ -23,11 +23,11 @@ export default function RegisterPage() {
       });
       alert('registro deu erto');
     }catch(e){
-      alert('registro falhou')
+      alert('registro falhou')//adicionar possiveis erros, esse email já esta em uso por exemplo
     }
   }
   return (
-    <div className="mt-4 grow flex items-center justify-around">
+    <div className="mt-4 grow flex items-center justify-around mt-20">
       <div className="mb-64">
         <h1 className="text-4xl text-center">Registra-se</h1>
         <form className="max-w-md mx-auto" onSubmit={registerUser}>

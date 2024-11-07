@@ -98,6 +98,12 @@ public class Controller implements HttpHandler {
 
                 }
             }
+            if("/login".equals(path)){
+                System.out.println("Buscando usuario");
+                try{
+                    Empresa empresa = gson.fromJson(new InputStreamReader(exchange.getRequestBody(),StandardCharsets.UTF_8),Empresa.class)
+                }
+            }
 
             
             if("/insertCozinha".equals(path)){
@@ -105,7 +111,7 @@ public class Controller implements HttpHandler {
                 try {   
                     Cozinha cozinha = gson.fromJson(new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8), Cozinha.class);
                     Cozinha addedCozinha = cozinhaOperations.insertCozinha(cozinha);
-                    response = gson.toJson(addedCozinha);
+                    response = gson.toJson(addedCozinha);//configurando a resposta json
                     exchange.sendResponseHeaders(201, response.getBytes(StandardCharsets.UTF_8).length);   
                     } catch (Exception e) {
                         System.err.println("Erro ao inserir cozinha "+e);
