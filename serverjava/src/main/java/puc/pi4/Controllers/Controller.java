@@ -28,8 +28,21 @@ public class Controller implements HttpHandler {
         String path = exchange.getRequestURI().getPath();
         String response = "";
 
-        System.out.println("MÉTODO CHAMADO " + method);
+  // Adicionando cabeçalhos CORS
+  exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*"); // Permite qualquer origem (pode substituir '*' por uma URL específica)
+  exchange.getResponseHeaders().add("Access-Control-Allow-Methods", "GET, PUT, PATCH, DELETE, OPTIONS"); // Métodos permitidos
+  exchange.getResponseHeaders().add("Access-Control-Allow-Headers", "Content-Type, Authorization"); // Cabeçalhos permitidos
+  exchange.getResponseHeaders().add("Access-Control-Allow-Credentials", "true"); // Permite enviar cookies, se necessário
 
+  // Verifica se é uma requisição OPTIONS (preflight request)
+  if ("OPTIONS".equals(method)) {
+      // Se for uma requisição OPTIONS, apenas responda com status 200 e os cabeçalhos de CORS
+      exchange.sendResponseHeaders(200, -1);
+      return;
+  }
+
+
+        System.out.println("MÉTODO CHAMADO " + method);
         System.out.println("CAMINHO : "+path);
 
 
