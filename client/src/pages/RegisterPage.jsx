@@ -21,7 +21,7 @@ export default function RegisterPage() {
         cnpj,
         telefone,
       });
-      alert('registro deu erto');
+      alert('registro deu certo');
     }catch(e){
       alert('registro falhou')//adicionar possiveis erros, esse email já esta em uso por exemplo
     }

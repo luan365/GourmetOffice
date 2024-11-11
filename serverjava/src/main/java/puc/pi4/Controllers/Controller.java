@@ -25,6 +25,8 @@ public class Controller implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         String method = exchange.getRequestMethod();
+        // extrai o caminho da URI da requisição HTTP feita ao servidor e o armazena na variável path. 
+        //Esse caminho pode então ser usado para verificar qual recurso ou endpoint o cliente está tentando acessa
         String path = exchange.getRequestURI().getPath();
         String response = "";
 
@@ -79,6 +81,8 @@ public class Controller implements HttpHandler {
                     }
             }
         }
+
+        
         
          //Switch Insert ->
         if("PUT".equals(method)){
@@ -98,14 +102,18 @@ public class Controller implements HttpHandler {
 
                 }
             }
-            if("/login".equals(path)){
+                 if("/login".equals(path)){
                 System.out.println("Buscando usuario");
                 try{
-                    Empresa empresa = gson.fromJson(new InputStreamReader(exchange.getRequestBody(),StandardCharsets.UTF_8),Empresa.class)
+                    List<Empresa> empresas = empresaOperations.login("email","senha");
+                }catch(Exception e ){
+                    System.err.println("Erro ao fazer login"+e);
+                    e.printStackTrace();
+                    // Este método imprime a pilha de chamadas (stack trace) no console ou no fluxo de erro. 
+                    //A pilha de chamadas é uma lista de métodos que estavam sendo executados no momento em que a exceção foi lançada. 
+                    //Isso ajuda a rastrear onde exatamente o erro ocorreu no código.
                 }
             }
-
-            
             if("/insertCozinha".equals(path)){
                 System.out.println("INSERINDO COZINHA");
                 try {   
@@ -120,8 +128,9 @@ public class Controller implements HttpHandler {
                         exchange.sendResponseHeaders(400, response.getBytes(StandardCharsets.UTF_8).length);
                     }
             }
-               
         }
+    
+    
 
         if("PATCH".equals(method)){
 
