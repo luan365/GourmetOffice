@@ -109,11 +109,12 @@ public class Controller implements HttpHandler {
                     LoginRequest loginrequest = gson.fromJson(new InputStreamReader(exchange.getRequestBody(),StandardCharsets.UTF_8),LoginRequest.class);
                     String email = loginrequest.getEmail();
                     String senha = loginrequest.getSenha();
+                    System.out.println("email"+email+"senha"+senha);
                     
                     List<Empresa> empresa = empresaOperations.login(email, senha);
                     
                     if(empresa!=null && !empresa.isEmpty()){
-                        response.gson.toJson(empresa.get(0));
+                        response = gson.toJson(empresa.get(0));
                         exchange.sendResponseHeaders((200),response.getBytes(StandardCharsets.UTF_8).length);
                     }
 
