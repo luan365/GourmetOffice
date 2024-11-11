@@ -13,7 +13,7 @@ export default function LoginPage() {
             senha,
             email,
           });
-          alert('registro deu certo');
+          alert('login deu certo deu certo');
         }catch(e){
           alert('registro falhou')//adicionar possiveis erros, esse email já esta em uso por exemplo
         }

@@ -104,8 +104,19 @@ public class Controller implements HttpHandler {
             }
                  if("/login".equals(path)){
                 System.out.println("Buscando usuario");
+                
                 try{
-                    List<Empresa> empresas = empresaOperations.login("email","senha");
+                    LoginRequest loginrequest = gson.fromJson(new InputStreamReader(exchange.getRequestBody(),StandardCharsets.UTF_8),LoginRequest.class);
+                    String email = loginrequest.getEmail();
+                    String senha = loginrequest.getSenha();
+                    
+                    List<Empresa> empresa = empresaOperations.login(email, senha);
+                    
+                    if(empresa!=null && !empresa.isEmpty()){
+                        response.gson.toJson(empresa.get(0));
+                        exchange.sendResponseHeaders((200),response.getBytes(StandardCharsets.UTF_8).length);
+                    }
+
                 }catch(Exception e ){
                     System.err.println("Erro ao fazer login"+e);
                     e.printStackTrace();
