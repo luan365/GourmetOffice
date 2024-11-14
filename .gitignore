@@ -3,3 +3,4 @@
 
 serverjava/.vscode/*
 serverjava/src/main/resources/db.properties
+serverjava/target/classes/db.properties
