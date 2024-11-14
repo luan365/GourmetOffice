@@ -7,12 +7,58 @@ export default function RegisterPage() {
   const [email, setEmail] = useState("");
   const [nome, setNome] = useState("");
   const [senha, setSenha] = useState("");
+  const [senhaConfirma, setSenhaConfirma] = useState("");
   const [endereco, setEndereco] = useState("");
   const [cnpj, setCnpj] = useState("");
   const [telefone, setTelefone] = useState("");
   const [cozinha, setCozinha] = useState(false);
   const [empresa, setEmpresa] = useState(false);
   async function registerUser(ev){
+    //VALIDATIONS
+
+    if (!cozinha && !empresa) {
+      alert("Por favor, selecione uma opção: Cozinha ou Empresa.");
+      return;
+    }
+
+    if(senha!=senhaConfirma){
+      alert("Senhas não correspondem");
+      return;
+    }
+
+    if(senha.length<8){
+      alert("Senha precisa ter no minimo 8 digitos");
+      return;
+    }
+
+    if(cnpj.length!=14){
+      alert("CNPJ inválido");
+      return;
+    }
+
+    if(nome.length==0){
+      alert("Preencha seu nome");
+      return;
+    }
+
+    if(email.length==0){
+      alert("Preencha seu email");
+      return;
+    }
+
+    if(telefone.length==0){
+      alert("Preencha seu telefone");
+      return;
+    }
+
+    if(endereco.length==0){
+      alert("Preencha seu endereço");
+      return;
+    }
+
+
+
+
     ev.preventDefault();
     try{
 
@@ -79,6 +125,11 @@ export default function RegisterPage() {
            value={senha}
            onChange={(ev)=>setSenha(ev.target.value)}
             />
+          <input type="password"
+           placeholder="confirme sua senha"
+           value={senhaConfirma}
+           onChange={(ev)=>setSenhaConfirma(ev.target.value)}
+            />
           <input type="text"
            placeholder="cnpj" 
            pattern="\d*" 
@@ -129,3 +180,4 @@ export default function RegisterPage() {
     </div>
   );
 }
+
