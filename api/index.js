@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose')
 const app = express();
-
+const EmpresaModel =require('./model/User.js')
 app.use(express.json());
 app.use(cors({
     credentials: true,
@@ -10,6 +10,9 @@ app.use(cors({
 }));
 
 
+
+
+// pegando os dados sensiveis sem usar o dotenv
 const fs = require('fs');
 
 // Função para carregar e extrair as propriedades do arquivo db.properties
@@ -46,9 +49,43 @@ const uri = `mongodb+srv://${user}:${pass}@gourmetoffice.fnzzv.mongodb.net/?retr
 mongoose.connect(uri);
 
 
-app.get('/teste',(req,res)=>{
+mongoose.connect(uri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+}).then(() => {
+  console.log('Conectado ao MongoDB');
+}).catch((err) => {
+  console.log('Erro de conexão com o MongoDB', err);
+});
+
+
+
+
+
+
+app.get('/teste',async (req,res)=>{
     res.json('server ok');
 });
+
+
+
+
+
+app.put('/login',async(req,res)=>{
+const {email,senha}=req.body;
+console.log('Requisição recebida com:', req.body);
+const empresa = await EmpresaModel.findOne({email});
+if (empresa){
+      res.json('achou')
+    console.log(empresa.email)      
+}else{
+    res.json('não achou')
+    console.log(empresa)
+}
+
+
+
+})
 
 
 app.listen(4000);

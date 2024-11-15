@@ -9,9 +9,9 @@ export default function LoginPage() {
   async function login(ev){
         ev.preventDefault()
         try{
-          await axios.put('http://localhost:8080/login',{
-            senha,
-            email,
+          await axios.put('http://localhost:4000/login',{
+           email,
+           senha
           });
           alert('login deu certo deu certo');
         }catch(e){
