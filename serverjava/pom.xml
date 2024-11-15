@@ -38,24 +38,24 @@
 
         <!-- Dependência do SLF4J API -->
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>2.0.16</version>
-        </dependency>
+    <groupId>org.slf4j</groupId>
+    <artifactId>slf4j-api</artifactId>
+    <version>2.0.16</version>
+</dependency>
+  <!-- Logback (implementação padrão do SLF4J) -->
+    <dependency>
+        <groupId>ch.qos.logback</groupId>
+        <artifactId>logback-classic</artifactId>
+        <version>1.4.5</version> <!-- ou a versão desejada -->
+    </dependency>
+    
+    <!-- Logback Core (necessário para o logback-classic funcionar) -->
+    <dependency>
+        <groupId>ch.qos.logback</groupId>
+        <artifactId>logback-core</artifactId>
+        <version>1.4.5</version> <!-- ou a versão desejada -->
+    </dependency>
 
-        <!-- Dependência do Logback Classic -->
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>1.4.7</version>
-        </dependency>
-
-        <!-- Dependência do Logback Core -->
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-core</artifactId>
-            <version>1.4.7</version>
-        </dependency>
 
         <!-- Dependência do JJWT -->
         <dependency>

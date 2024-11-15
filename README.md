@@ -34,6 +34,8 @@ Repositório do **Grupo 8** do projeto integrador 4.
 
 - *Executar o comando "yarn" no diretório "client" para instalar dependências do yarn*
 
+- *Executar "npm install axios" no mesmo terminal*
+
 - *Digitar "yarn dev" no temrinal e clickar no link localhost*
 
 ### Iniciando o servidor java

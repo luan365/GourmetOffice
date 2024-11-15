@@ -30,7 +30,7 @@ public class EmpresaOperations {
                 String uri = String.format("mongodb+srv://%s:%s@gourmetoffice.fnzzv.mongodb.net/", user,pass);
     
                 // Conectando ao MongoDB Atlas
-                MongoClient mongoClient = MongoClients.create("mongodb+srv://bruno:123456qwerty@gourmetoffice.fnzzv.mongodb.net/");
+                MongoClient mongoClient = MongoClients.create(uri);
                 MongoDatabase database = mongoClient.getDatabase("GourmetOffice");
                 this.collection = database.getCollection("Empresas");
     
