@@ -38,6 +38,18 @@ Repositório do **Grupo 8** do projeto integrador 4.
 
 - *Digitar "yarn dev" no temrinal e clickar no link localhost*
 
+### Iniciando servidor com node.js
+- *na pasta api*
+- *importar express =  yarn add express*
+- *importar cors = yarn add cors*
+- *importar mongo = yarn add mongoose*
+
+
+
+- para rodar o servidor com node + express
+- *na pasta api digitar "nodemon index.js"*
+
+
 ### Iniciando o servidor java
 
 - *Executar "ServerJava.java" que está no diretório "GourmetOffice\serverjava\src\main\java\puc\pi4\" para iniciar o servidor*
