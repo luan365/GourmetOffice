@@ -190,7 +190,15 @@ public class Controller implements HttpHandler {
 
             if("/deleteEmpresa".equals(path)){
                 try(InputStreamReader reader = new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8)) {
-                    String cnpj =gson.fromJson(reader, String.class);
+                    //String cnpj =gson.fromJson(reader, String.class);
+                    //Empresa deletedEmpresa = empresaOperations.deleteEmpresa(cnpj);
+                    CNPJRequest cnpjRequest = gson.fromJson(reader, CNPJRequest.class);
+                    String cnpj = cnpjRequest.cnpj;
+
+                    if (cnpj == null || cnpj.isEmpty()) {
+                        throw new IllegalArgumentException("CNPJ não pode ser nulo ou vazio.");
+                    }
+
                     Empresa deletedEmpresa = empresaOperations.deleteEmpresa(cnpj);
                 
                     if (deletedEmpresa != null) {
