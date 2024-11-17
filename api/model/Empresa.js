@@ -13,6 +13,6 @@ const EmpresaSchema = new Schema ({
     collection: 'Empresas'  // Especifica o nome da coleção existente no MongoDB
 }
     );
-const EmpresaModel = mongoose.model('Empresas', EmpresaSchema);
+const EmpresaModel = mongoose.model('Empresas', EmpresaSchema,'Empresas');
 module.exports = EmpresaModel;
  

@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose')
 const app = express();
-const EmpresaModel =require('./model/User.js')
+const EmpresaModel =require('./model/Empresa.js')
 app.use(express.json());
 app.use(cors({
     credentials: true,
@@ -44,11 +44,12 @@ const user = credentials.db_user;
 const pass = credentials.db_password;
 
 // Construir a URI de conexão com MongoDB
-const uri = `mongodb+srv://${user}:${pass}@gourmetoffice.fnzzv.mongodb.net/?retryWrites=true&w=majority&appName=gourmetOffice`;
+const uri = 'mongodb+srv://vitorhugo:123456qwerty@gourmetoffice.fnzzv.mongodb.net/GourmetOffice?retryWrites=true&w=majority&appName=gourmetOffice';
+
 
 mongoose.connect(uri);
 
-
+/*
 mongoose.connect(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -59,7 +60,10 @@ mongoose.connect(uri, {
 });
 
 
-
+mongoose.connection.once('open', () => {
+  console.log('Conectado ao MongoDB na base:', mongoose.connection.name);
+});
+*/
 
 
 
@@ -68,18 +72,18 @@ app.get('/teste',async (req,res)=>{
 });
 
 
-
-
-
 app.put('/login',async(req,res)=>{
 const {email,senha}=req.body;
 console.log('Requisição recebida com:', req.body);
-const empresa = await EmpresaModel.findOne({email});
+const empresa = await EmpresaModel.findOne({email,senha});
 if (empresa){
-      res.json('achou')
-    console.log(empresa.email)      
+  if(senha===empresa.senha){
+    res.json('senha certa')
+
+  }
+    console.log(empresa.senha)      
 }else{
-    res.json('não achou')
+    res.json('senha errada')
     console.log(empresa)
 }
 
