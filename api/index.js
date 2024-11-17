@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
 const app = express();
 const EmpresaModel =require('./model/Empresa.js')
@@ -10,6 +11,7 @@ app.use(cors({
 }));
 
 
+const  jwtSecret = 'kljhdfkjsdhskhjdhf'//string de assinatura para token
 
 
 // pegando os dados sensiveis sem usar o dotenv
@@ -78,10 +80,12 @@ console.log('Requisição recebida com:', req.body);
 const empresa = await EmpresaModel.findOne({email,senha});
 if (empresa){
   if(senha===empresa.senha){
-    res.json('senha certa')
+    jwt.sign({email:empresa.email,id:empresa._id},jwtSecret, {}, (err,token)=>{
+      res.cookie('token',token).json(empresa)
 
+
+    })//gerando uma assinatura token com os dados email e id no payload
   }
-    console.log(empresa.senha)      
 }else{
     res.json('senha errada')
     console.log(empresa)
