@@ -42,6 +42,8 @@ Repositório do **Grupo 8** do projeto integrador 4.
 - *na pasta api*
 - *importar express =  yarn add express*
 - *importar cors = yarn add cors*
+- *importar JsonWebToken = yarn add jsonwebtoken*
+- *importar cookieParser = yarn add cookieParser*
 - *importar mongo = yarn add mongoose*
 
 
