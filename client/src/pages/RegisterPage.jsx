@@ -14,6 +14,7 @@ export default function RegisterPage() {
   const [telefone, setTelefone] = useState("");
   const [cozinha, setCozinha] = useState(false);
   const [empresa, setEmpresa] = useState(false);
+  const [descricao, setDescricao] = useState("");
   async function registerUser(ev){
     //VALIDATIONS
 
@@ -71,6 +72,7 @@ export default function RegisterPage() {
           endereco,
           cnpj,
           telefone,
+          descricao
         });
         alert('registro deu certo');
       }
@@ -169,6 +171,19 @@ export default function RegisterPage() {
               Empresa
             </label>
           </div>
+
+
+          <input
+            type="text"
+            placeholder="Campo adicional para Cozinha"
+            value={descricao}
+            onChange={(ev) => setDescricao(ev.target.value)}
+            disabled={!cozinha}
+            className={`mt-4 block w-full p-2 border ${
+              cozinha ? "bg-white text-black" : "bg-gray-200 text-gray-400"
+            }`}
+          />
+
           <button className="text-white">Registrar</button>
           <div className="text-center py-2">
             Já possui uma conta?
@@ -181,4 +196,3 @@ export default function RegisterPage() {
     </div>
   );
 }
-
