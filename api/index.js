@@ -100,8 +100,8 @@ app.get('/profile', (req,res)=>{
   if(token){
     jwt.verify(token,jwtSecret,{},async(err,userData)=>{
       if(err)throw err;
-      const {email,_id}= await EmpresaModel.findById(userData.id);
-      res.json({email,_id});
+      const {nome,email,_id} = await EmpresaModel.findById(userData.id)
+      res.json({nome,email,_id});
     })
   }else{
     res.json(null);
