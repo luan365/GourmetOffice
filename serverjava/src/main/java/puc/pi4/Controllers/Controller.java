@@ -31,10 +31,10 @@ public class Controller implements HttpHandler {
         String response = "";
 
   // Adicionando cabeçalhos CORS
-  exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*"); // Permite qualquer origem (pode substituir '*' por uma URL específica)
+  exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "http://localhost:5173"); // Permite qualquer origem (pode substituir '*' por uma URL específica)
   exchange.getResponseHeaders().add("Access-Control-Allow-Methods", "GET, PUT, PATCH, DELETE, OPTIONS"); // Métodos permitidos
   exchange.getResponseHeaders().add("Access-Control-Allow-Headers", "Content-Type, Authorization"); // Cabeçalhos permitidos
-  exchange.getResponseHeaders().add("Access-Control-Allow-Credentials", "true"); // Permite enviar cookies, se necessário
+  exchange.getResponseHeaders().add("Access-Control-Allow-Credentials", "true"); // Permite enviar cookies
 
   // Verifica se é uma requisição OPTIONS (preflight request)
   if ("OPTIONS".equals(method)) {
