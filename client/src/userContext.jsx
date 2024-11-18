@@ -4,11 +4,12 @@ import axios from 'axios'
 
 export function UserContextProvider({children}){ //provedor do contexto, responsável por envolver outros componentes e compartilhar o valor do contexto
 const [user,setUser] = useState(null);
-
+const [ready,setReady] = useState(false);
 useEffect(() =>{
     if (!user){
         axios.get('/profile').then(({data})=>{
             setUser(data);
+            setReady(true);
         });
     }
 },[]) // garante a sincronização de dados  
@@ -16,7 +17,7 @@ useEffect(() =>{
     return(
         
        
-          <UserContext.Provider value={{user,setUser}}>
+          <UserContext.Provider value={{user,setUser,ready,setReady}}>
             {children}
           </UserContext.Provider>
         
