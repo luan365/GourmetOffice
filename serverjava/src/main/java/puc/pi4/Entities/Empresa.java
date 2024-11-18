@@ -21,4 +21,17 @@ public class Empresa {
     public String getCNPJ(){
         return this.cnpj;
     }
+
+    @Override
+    public String toString(){
+        String ret = "{ EMPRESA\n" ;
+        ret += ("Nome: "+this.nome + "\n");
+        ret += ("CNPJ: "+this.cnpj + "\n");
+        ret += ("Email: "+this.email + "\n");
+        ret += ("Telefone: "+this.telefone + "\n");
+        ret += ("Endereco: "+this.endereco + "\n}");
+        
+
+        return ret;
+    }
 }

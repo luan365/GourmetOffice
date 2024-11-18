@@ -16,7 +16,7 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.FindOneAndUpdateOptions;
 
 import puc.pi4.Entities.Cozinha;
-import puc.pi4.Entities.Empresa;
+
 
 public class CozinhaOperations {
     private MongoCollection<Document> collection;

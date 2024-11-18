@@ -65,6 +65,9 @@ public class Controller implements HttpHandler {
                 }
             }
 
+            if("/getEmpresaBy".equals(path)){}
+
+            if("/getCozinhaBy".equals(path)){}
             
             if("/getAllCozinhas".equals(path)){
                 try {
@@ -130,6 +133,7 @@ public class Controller implements HttpHandler {
                 System.out.println("INSERINDO COZINHA");
                 try {   
                     Cozinha cozinha = gson.fromJson(new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8), Cozinha.class);
+                    
                     Cozinha addedCozinha = cozinhaOperations.insertCozinha(cozinha);
                     response = gson.toJson(addedCozinha);//configurando a resposta json
                     exchange.sendResponseHeaders(201, response.getBytes(StandardCharsets.UTF_8).length);   
