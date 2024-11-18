@@ -3,10 +3,12 @@ const cors = require('cors');
 const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
 const app = express();
+const cookieParser = require('cookie-parser')
 const EmpresaModel =require('./model/Empresa.js')
 
-
+//midware
 app.use(express.json());
+app.use(cookieParser()); // -> lendo o cookeies dem json
 app.use(cors({
     credentials: true,
     origin: 'http://localhost:5173',
@@ -95,7 +97,15 @@ if (empresa){
 
 app.get('/profile', (req,res)=>{
   const {token} = req.cookies
-  res.json({token});
+  if(token){
+    jwt.verify(token,jwtSecret,{},async(err,userData)=>{
+      if(err)throw err;
+      const {email,_id}= await EmpresaModel.findById(userData.id);
+      res.json({email,_id});
+    })
+  }else{
+    res.json(null);
+  }
 })
 
 
