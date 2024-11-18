@@ -4,6 +4,8 @@ const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
 const app = express();
 const EmpresaModel =require('./model/Empresa.js')
+
+
 app.use(express.json());
 app.use(cors({
     credentials: true,
@@ -89,10 +91,11 @@ if (empresa){
 }else{
     res.json('senha errada')
     console.log(empresa)
-}
+}});
 
-
-
+app.get('/profile', (req,res)=>{
+  const {token} = req.cookies
+  res.json({token});
 })
 
 
