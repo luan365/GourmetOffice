@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 import React from "react";
 import axios from "axios";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 
 
 export default function RegisterPage() {
@@ -15,6 +17,9 @@ export default function RegisterPage() {
   const [cozinha, setCozinha] = useState(false);
   const [empresa, setEmpresa] = useState(false);
   const [descricao, setDescricao] = useState("");
+
+  const navigate = useNavigate();
+
   async function registerUser(ev){
     //VALIDATIONS
 
@@ -74,7 +79,8 @@ export default function RegisterPage() {
           telefone,
           descricao
         });
-        alert('registro deu certo');
+        alert('Sua cozinha foi cadastrada com sucesso!');
+        
       }
 
       if(empresa==true){
@@ -86,12 +92,15 @@ export default function RegisterPage() {
           cnpj,
           telefone,
         });
-        alert('registro deu certo');
+        alert('Empresa cadastrada');
+        
       }
 
-
+      setTimeout(() => {
+        navigate("/login");
+      }, 300);
     }catch(e){
-      alert('registro falhou' + e)//adicionar possiveis erros, esse email já esta em uso por exemplo
+      alert('registro falhou ' + e)//adicionar possiveis erros, esse email já esta em uso por exemplo
     }
   }
 
