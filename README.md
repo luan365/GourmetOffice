@@ -55,3 +55,20 @@ Repositório do **Grupo 8** do projeto integrador 4.
 ### Iniciando o servidor java
 
 - *Executar "ServerJava.java" que está no diretório "GourmetOffice\serverjava\src\main\java\puc\pi4\" para iniciar o servidor*
+
+FALTANTES
+
+ arrumar erros da pagina login
+
+    erro quando os usuarios escolhe o checkbox errado mas conta existente não existe o usuario na  collection mas mesmo assim loga
+
+    e erro de senha 
+
+ separar a pagina de conta do usuario cozinha e empresa
+
+    para empresa -> apenas add um botao para deslogar EmpresaAccont.jsx
+   
+    para cozinha -> uma opção de adicionar sua cozinha CozinhaAccont.jsx                                    para pagina index(principal)
+
+ index.jsx 
+    recuperar os dados da cozinha 
