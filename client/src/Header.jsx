@@ -27,7 +27,7 @@ export default function Header(){
             </svg>
           </button>
           </div>
-          <Link to={user? '/accont':'/login'} className='flex items-center border border-gray-500 rounded-full px-3 py-1 gap-2 shadow-md shadow-black-300'>
+          <Link to={user? '/empresaAccont':'/login'} className='flex items-center border border-gray-500 rounded-full px-3 py-1 gap-2 shadow-md shadow-black-300'>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8">
               <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
             </svg>

@@ -3,8 +3,9 @@ const cors = require('cors');
 const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
 const app = express();
-const cookieParser = require('cookie-parser')
-const EmpresaModel =require('./model/Empresa.js')
+const cookieParser = require('cookie-parser');
+const EmpresaModel = require('./model/Empresa.js');
+const CozinhaModel = require('./model/Cozinha.js');
 
 //midware
 app.use(express.json());
@@ -78,7 +79,7 @@ app.get('/teste',async (req,res)=>{
 });
 
 
-app.put('/login',async(req,res)=>{
+app.put('/login/empresa',async(req,res)=>{
 const {email,senha}=req.body;
 console.log('Requisição recebida com:', req.body);
 const empresa = await EmpresaModel.findOne({email,senha});
@@ -86,27 +87,65 @@ if (empresa){
   if(senha===empresa.senha){
     jwt.sign({email:empresa.email,id:empresa._id},jwtSecret, {}, (err,token)=>{
       res.cookie('token',token).json(empresa)
-
-
     })//gerando uma assinatura token com os dados email e id no payload
   }
 }else{
     res.json('senha errada')
-    console.log(empresa)
+    console.log('entrou aqui:',empresa)
 }});
 
-app.get('/profile', (req,res)=>{
-  const {token} = req.cookies
-  if(token){
-    jwt.verify(token,jwtSecret,{},async(err,userData)=>{
-      if(err)throw err;
-      const {nome,email,_id} = await EmpresaModel.findById(userData.id)
-      res.json({nome,email,_id});
-    })
+
+app.put('/login/cozinha',async(req,res)=>{
+  const {email,senha}=req.body;
+  console.log('Requisição recebida com:', req.body);
+  const cozinha = await CozinhaModel.findOne({email,senha});
+  if (cozinha){
+    if(senha===cozinha.senha){
+      jwt.sign({email:cozinha.email,id:cozinha._id},jwtSecret, {}, (err,token)=>{
+        res.cookie('token',token).json(cozinha)
+      })//gerando uma assinatura token com os dados email e id no payload
+    }
   }else{
-    res.json(null);
-  }
-})
+      res.json('senha errada')
+      console.log('entrou aqui  if cozinha:',cozinha)
+  }});
+
+  app.get('/profile', async (req, res) => {
+    const { token } = req.cookies;
+    if (!token) {
+      return res.status(401).json({ message: 'Token não fornecido' });
+    }
+  
+    try {
+      jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+        if (err) {
+          return res.status(403).json({ message: 'Token inválido' });
+        }
+  
+        // Tenta buscar no modelo Empresa
+        let userProfile = await EmpresaModel.findById(userData.id);
+        if (userProfile) {
+          const { nome: empresaNome, email: empresaEmail, _id: empresaId, } = userProfile;
+          return res.json({ tipo: 'empresa', nome: empresaNome, email: empresaEmail, id: empresaId, senha: empresaSenha}); 
+        }
+  
+        // Caso não encontre no modelo Empresa, tenta buscar no modelo Cozinha
+        userProfile = await CozinhaModel.findById(userData.id);
+        if (userProfile) {
+          const { nome: cozinhaNome, email: cozinhaEmail, _id: cozinhaId, senha: cozinhaSenha, cnpj: cozinhaCNPJ, endereco: cozinhaEndereco, telefone: cozinhaTelefone} = userProfile;
+          return res.json({ tipo: 'cozinha', nome: cozinhaNome, email: cozinhaEmail, id: cozinhaId, senha: cozinhaSenha, cnpj:cozinhaCNPJ, endereco: cozinhaEndereco, telefone: cozinhaTelefone }); 
+        }
+  
+        // Se não encontrar em nenhum dos modelos
+        return res.status(404).json({ message: 'Usuário não encontrado' }); // Importante: usar return
+      });
+    } catch (error) {
+      console.error('Erro no profile:', error);
+      res.status(500).json({ message: 'Erro interno do servidor' });
+    }
+  });
+  
+ 
 
 
 app.listen(4000);
