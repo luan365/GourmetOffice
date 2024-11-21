@@ -125,15 +125,15 @@ app.put('/login/cozinha',async(req,res)=>{
         // Tenta buscar no modelo Empresa
         let userProfile = await EmpresaModel.findById(userData.id);
         if (userProfile) {
-          const { nome: empresaNome, email: empresaEmail, _id: empresaId, } = userProfile;
-          return res.json({ tipo: 'empresa', nome: empresaNome, email: empresaEmail, id: empresaId, senha: empresaSenha}); 
+          const { nome: empresaNome, email: empresaEmail, _id: empresaId,senha: empresaSenha, cnpj: empresaCNPJ, endereco: empresaEndereco, telefone: empresaTelefone } = userProfile;
+          return res.json({ tipo: 'empresa', nome: empresaNome, email: empresaEmail, id: empresaId, senha: empresaSenha,cnpj: empresaCNPJ, endereco: empresaEndereco, telefone: empresaTelefone}); 
         }
   
         // Caso não encontre no modelo Empresa, tenta buscar no modelo Cozinha
         userProfile = await CozinhaModel.findById(userData.id);
         if (userProfile) {
           const { nome: cozinhaNome, email: cozinhaEmail, _id: cozinhaId, senha: cozinhaSenha, cnpj: cozinhaCNPJ, endereco: cozinhaEndereco, telefone: cozinhaTelefone} = userProfile;
-          return res.json({ tipo: 'cozinha', nome: cozinhaNome, email: cozinhaEmail, id: cozinhaId, senha: cozinhaSenha, cnpj:cozinhaCNPJ, endereco: cozinhaEndereco, telefone: cozinhaTelefone }); 
+          return res.json({ tipo: 'cozinha', nome: cozinhaNome, email: cozinhaEmail, id: cozinhaId, senha: cozinhaSenha, cnpj: cozinhaCNPJ, endereco: cozinhaEndereco, telefone: cozinhaTelefone }); 
         }
   
         // Se não encontrar em nenhum dos modelos
@@ -144,6 +144,11 @@ app.put('/login/cozinha',async(req,res)=>{
       res.status(500).json({ message: 'Erro interno do servidor' });
     }
   });
+
+app.put('/logout',(req,res)=>{
+  console.log("entrou no index logout")
+  res.cookie('token','').json("saiu")
+})
   
  
 

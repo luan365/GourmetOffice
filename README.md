@@ -64,11 +64,14 @@ FALTANTES
 
     e erro de senha 
 
- separar a pagina de conta do usuario cozinha e empresa
+ separar a pagina de conta do usuario cozinha e empresa  ----------- (Feito)
 
-    para empresa -> apenas add um botao para deslogar EmpresaAccont.jsx
+    para empresa -> apenas add um botao para deslogar EmpresaAccont.jsx  ----------- (Feito)
    
-    para cozinha -> uma opção de adicionar sua cozinha CozinhaAccont.jsx                                    para pagina index(principal)
+    para cozinha -> uma opção de adicionar sua cozinha CozinhaAccont.jsx ----------- (Feito)
+      
 
  index.jsx 
     recuperar os dados da cozinha 
+    
+        para pagina index(principal)

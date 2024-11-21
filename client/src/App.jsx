@@ -7,7 +7,9 @@ import RegisterPage from './pages/RegisterPage';
 import {UserContextProvider} from "./userContext"
 import Layout  from './Layout';
 import axios from "axios";
-import AccontPage from './pages/EmpresaAccontPage';
+import AccontEmpresaPage from './pages/EmpresaAccontPage';
+import AccontCozinhaPage from './pages/CozinhaAccontPage';
+
 
 axios.defaults.baseURL = 'http://localhost:4000';// especificando rota padrao
 axios.defaults.withCredentials = true;
@@ -21,7 +23,8 @@ function App() {
           <Route index element={<IndexPage/>}/>
           <Route path="/login" element={<LoginPage />}/>
           <Route path='/register'element={<RegisterPage/>}/>
-          <Route path='/EmpresaAccont'element={<AccontPage/>}/>
+          <Route path='/Accont/Empresa'element={<AccontEmpresaPage/>}/>
+          <Route path='/Accont/Cozinha'element={<AccontCozinhaPage/>}/>
         </Route>
       </Routes>
     </UserContextProvider>
