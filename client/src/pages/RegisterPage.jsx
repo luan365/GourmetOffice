@@ -17,6 +17,7 @@ export default function RegisterPage() {
   const [cozinha, setCozinha] = useState(false);
   const [empresa, setEmpresa] = useState(false);
   const [descricao, setDescricao] = useState("");
+  const [tipo, setTipo] = useState("");
 
   const navigate = useNavigate();
 
@@ -70,6 +71,9 @@ export default function RegisterPage() {
     try{
 
       if(cozinha==true){
+
+        
+
         await axios.put('http://localhost:8080/insertCozinha',{
           nome,
           senha,
@@ -77,13 +81,17 @@ export default function RegisterPage() {
           endereco,
           cnpj,
           telefone,
-          descricao
+          descricao,
+          tipo
         });
         alert('Sua cozinha foi cadastrada com sucesso!');
         
       }
 
       if(empresa==true){
+
+        
+
         await axios.put('http://localhost:8080/insertEmpresa',{
           nome,
           senha,
@@ -91,6 +99,7 @@ export default function RegisterPage() {
           endereco,
           cnpj,
           telefone,
+          tipo
         });
         alert('Empresa cadastrada');
         
@@ -108,9 +117,11 @@ export default function RegisterPage() {
     if (type === "cozinha") {
       setCozinha(true);
       setEmpresa(false);
+      setTipo("cozinha");
     } else {
       setCozinha(false);
       setEmpresa(true);
+      setTipo("empresa");
     }
   };
 

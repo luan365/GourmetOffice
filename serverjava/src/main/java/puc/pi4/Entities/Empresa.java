@@ -7,15 +7,16 @@ public class Empresa {
     private String senha;
     private String telefone;
     private String endereco;
+    private String tipo;
     
-    
-    public Empresa(String nome,String cnpj,String email,String senha,String telefone, String endereco){
+    public Empresa(String nome,String cnpj,String email,String senha,String telefone, String endereco, String tipo){
         this.nome = nome;
         this.cnpj = cnpj;
         this.email = email;
         this.senha = senha;
         this.telefone = telefone;
         this.endereco = endereco;
+        this.tipo = tipo;
     }
 
     public String getCNPJ(){
@@ -29,8 +30,8 @@ public class Empresa {
         ret += ("CNPJ: "+this.cnpj + "\n");
         ret += ("Email: "+this.email + "\n");
         ret += ("Telefone: "+this.telefone + "\n");
-        ret += ("Endereco: "+this.endereco + "\n}");
-        
+        ret += ("Endereco: "+this.endereco + "\n");
+        ret += ("Tipo: "+this.tipo + "\n}");
 
         return ret;
     }

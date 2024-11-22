@@ -53,7 +53,8 @@ public class EmpresaOperations {
             doc.getString("email"),
             doc.getString("senha"),
             doc.getString("telefone"),
-            doc.getString("endereco"));
+            doc.getString("endereco"),
+            doc.getString("tipo"));
             empresas.add(empresa);
 
         }
@@ -74,7 +75,8 @@ public class EmpresaOperations {
                                           doc.getString("email"),
                                           doc.getString("senha"),
                                           doc.getString("telefone"),
-                                          doc.getString("endereco"));
+                                          doc.getString("endereco"),
+                                          doc.getString("tipo"));
             
             empresas.add(empresa);
         }

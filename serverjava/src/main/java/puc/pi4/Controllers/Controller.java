@@ -94,6 +94,7 @@ public class Controller implements HttpHandler {
                 System.out.println("INSERINDO EMPRESA");
                 try {    
                 Empresa empresa = gson.fromJson(new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8), Empresa.class);
+                System.out.println(empresa.toString());
                 Empresa addedEmpresa = empresaOperations.insertEmpresa(empresa);
                 response = gson.toJson(addedEmpresa);
                 exchange.sendResponseHeaders(201, response.getBytes(StandardCharsets.UTF_8).length);

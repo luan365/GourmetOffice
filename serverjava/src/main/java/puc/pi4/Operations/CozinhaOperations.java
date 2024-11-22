@@ -52,7 +52,9 @@ public class CozinhaOperations {
             doc.getString("email"),
             doc.getString("senha"),
             doc.getString("telefone"),
-            doc.getString("endereco"));
+            doc.getString("endereco"),
+            doc.getString("descricao"),
+            doc.getString("tipo"));
 
             cozinhas.add(cozinha);
 
