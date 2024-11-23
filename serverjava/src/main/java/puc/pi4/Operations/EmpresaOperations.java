@@ -35,7 +35,7 @@ public class EmpresaOperations {
                 this.collection = database.getCollection("Empresas");
     
             } catch (IOException e) {
-                System.err.println("DEU MERDA");
+                System.err.println("Erro ao conectar mongo");
                 e.printStackTrace();
             }
         } 

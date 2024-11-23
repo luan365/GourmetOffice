@@ -94,7 +94,7 @@ public class Controller implements HttpHandler {
                 System.out.println("INSERINDO EMPRESA");
                 try {    
                 Empresa empresa = gson.fromJson(new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8), Empresa.class);
-                System.out.println(empresa.toString());
+                System.out.println(empresa.toString() );
                 Empresa addedEmpresa = empresaOperations.insertEmpresa(empresa);
                 response = gson.toJson(addedEmpresa);
                 exchange.sendResponseHeaders(201, response.getBytes(StandardCharsets.UTF_8).length);
@@ -200,8 +200,14 @@ public class Controller implements HttpHandler {
                     CNPJRequest cnpjRequest = gson.fromJson(reader, CNPJRequest.class);
                     String cnpj = cnpjRequest.cnpj;
 
-                    if (cnpj == null || cnpj.isEmpty()) {
-                        throw new IllegalArgumentException("CNPJ não pode ser nulo ou vazio.");
+                    if (cnpj == null || cnpj.isEmpty() || cnpj.length()!=14) {
+                        throw new IllegalArgumentException("CNPJ não pode ser nulo ou vazio e deve ter 14 digitos.");
+                    }
+
+                    try  {
+                        int stringtransformada = Integer.parseInt(cnpj);
+                    } catch (Exception e) {
+                        throw new IllegalArgumentException("CNPJ deve ser uma string de inteiros");
                     }
 
                     Empresa deletedEmpresa = empresaOperations.deleteEmpresa(cnpj);
