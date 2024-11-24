@@ -194,20 +194,24 @@ public class Controller implements HttpHandler {
         if("DELETE".equals(method)){
 
             if("/deleteEmpresa".equals(path)){
+                String erro = null;
                 try(InputStreamReader reader = new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8)) {
-                    //String cnpj =gson.fromJson(reader, String.class);
-                    //Empresa deletedEmpresa = empresaOperations.deleteEmpresa(cnpj);
+                    
+                    
+
                     CNPJRequest cnpjRequest = gson.fromJson(reader, CNPJRequest.class);
                     String cnpj = cnpjRequest.cnpj;
 
                     if (cnpj == null || cnpj.isEmpty() || cnpj.length()!=14) {
-                        throw new IllegalArgumentException("CNPJ não pode ser nulo ou vazio e deve ter 14 digitos.");
+                        erro = "CNPJ não pode ser nulo ou vazio e deve ter 14 digitos.";
+                        throw new IllegalArgumentException("");
+                        
                     }
 
-                    try  {
-                        int stringtransformada = Integer.parseInt(cnpj);
-                    } catch (Exception e) {
-                        throw new IllegalArgumentException("CNPJ deve ser uma string de inteiros");
+                    if (!cnpj.matches("[0-9]+"))
+                    {
+                        erro = "CNPJ deve ser uma string de inteiros";
+                        throw new IllegalArgumentException();
                     }
 
                     Empresa deletedEmpresa = empresaOperations.deleteEmpresa(cnpj);
@@ -223,9 +227,9 @@ public class Controller implements HttpHandler {
                 
                 
                 } catch (Exception e) {
-                    System.err.println("Erro ao deletar empresa"+e);
+                    System.err.println("Erro ao deletar empresa "+e);
                     e.printStackTrace();
-                    response = gson.toJson("Erro ao processar a solicitação.");
+                    response = gson.toJson(erro);
                     exchange.sendResponseHeaders(400, response.getBytes(StandardCharsets.UTF_8).length);
                 }
             }
