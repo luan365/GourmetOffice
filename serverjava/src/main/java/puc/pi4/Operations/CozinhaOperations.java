@@ -101,5 +101,34 @@ public class CozinhaOperations {
 
     }
 
+        public Cozinha deleteCozinha(String cnpj) throws Exception {
+        
+
+        Document filter = new Document("cnpj", cnpj);
+
+        Document cozinhaDeletada = null;
+
+        try {
+            cozinhaDeletada = collection.findOneAndDelete(filter);
+        } catch (Exception e) {
+            System.err.println("Erro interno mongoDB \n");
+            throw new Exception(e);
+            
+        }
+
+        
+
+        if (cozinhaDeletada != null) {
+            // Converte o Document de volta para um objeto Empresa
+            Gson gson = new Gson();
+            
+            return gson.fromJson(cozinhaDeletada.toJson(), Cozinha.class);
+        } else {
+            System.out.println("Nenhuma Cozinha encontrada com o CNPJ fornecido.");
+            return null; // Retorna null caso não encontre o documento
+        }
+
+    }
+
 
 }

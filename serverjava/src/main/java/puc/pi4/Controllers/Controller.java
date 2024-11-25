@@ -106,30 +106,7 @@ public class Controller implements HttpHandler {
 
                 }
             }
-                 if("/login".equals(path)){
-                System.out.println("Buscando usuario");
                 
-                try{
-                    LoginRequest loginrequest = gson.fromJson(new InputStreamReader(exchange.getRequestBody(),StandardCharsets.UTF_8),LoginRequest.class);
-                    String email = loginrequest.getEmail();
-                    String senha = loginrequest.getSenha();
-                    System.out.println("email"+email+"senha"+senha);
-                    
-                    List<Empresa> empresa = empresaOperations.login(email, senha);
-                    
-                    if(empresa!=null && !empresa.isEmpty()){
-                        response = gson.toJson(empresa.get(0));
-                        exchange.sendResponseHeaders((200),response.getBytes(StandardCharsets.UTF_8).length);
-                    }
-
-                }catch(Exception e ){
-                    System.err.println("Erro ao fazer login"+e);
-                    e.printStackTrace();
-                    // Este método imprime a pilha de chamadas (stack trace) no console ou no fluxo de erro. 
-                    //A pilha de chamadas é uma lista de métodos que estavam sendo executados no momento em que a exceção foi lançada. 
-                    //Isso ajuda a rastrear onde exatamente o erro ocorreu no código.
-                }
-            }
             if("/insertCozinha".equals(path)){
                 System.out.println("INSERINDO COZINHA");
                 try {   
@@ -236,7 +213,44 @@ public class Controller implements HttpHandler {
 
             
             if("/deleteCozinha".equals(path)){
+                String erro = null;
+                try(InputStreamReader reader = new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8)) {
+                    
+                    
+
+                    CNPJRequest cnpjRequest = gson.fromJson(reader, CNPJRequest.class);
+                    String cnpj = cnpjRequest.cnpj;
+
+                    if (cnpj == null || cnpj.isEmpty() || cnpj.length()!=14) {
+                        erro = "CNPJ não pode ser nulo ou vazio e deve ter 14 digitos.";
+                        throw new IllegalArgumentException("");
+                        
+                    }
+
+                    if (!cnpj.matches("[0-9]+"))
+                    {
+                        erro = "CNPJ deve ser uma string de inteiros";
+                        throw new IllegalArgumentException();
+                    }
+
+                    Cozinha deletedCozinha = cozinhaOperations.deleteCozinha(cnpj);
                 
+                    if (deletedCozinha != null) {
+                        response = gson.toJson(deletedCozinha);
+                        exchange.sendResponseHeaders(200, response.getBytes(StandardCharsets.UTF_8).length);
+                    } else {
+                        // Retorna erro se nenhuma empresa foi encontrada com o CNPJ fornecido
+                        response = gson.toJson("Cozinha com CNPJ " + cnpj + " não encontrada.");
+                        exchange.sendResponseHeaders(404, response.getBytes(StandardCharsets.UTF_8).length);
+                    }
+                
+                
+                } catch (Exception e) {
+                    System.err.println("Erro ao deletar Cozinha "+e);
+                    e.printStackTrace();
+                    response = gson.toJson(erro);
+                    exchange.sendResponseHeaders(400, response.getBytes(StandardCharsets.UTF_8).length);
+                }
             }
         }
        
