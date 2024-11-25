@@ -26,6 +26,8 @@ Repositório do **Grupo 8** do projeto integrador 4.
 
 - *Criar um arquivo "db.properties" no diretório "GourmetOffice\serverjava\src\main\resources\db.properties" com campos "db_user" e "db_password"*
 
+- *Alterar o filepath no index.js na pasta api*
+
 - *Instalar o yarn*
 
 - *instalar maven* (opcional)
