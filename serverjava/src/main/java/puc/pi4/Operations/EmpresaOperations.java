@@ -121,7 +121,7 @@ public class EmpresaOperations {
 
     }
 
-    public Empresa deleteEmpresa(String cnpj) {
+    public Empresa deleteEmpresa(String cnpj) throws Exception {
         
 
         Document filter = new Document("cnpj", cnpj);
@@ -131,9 +131,12 @@ public class EmpresaOperations {
         try {
             empresaDeletada = collection.findOneAndDelete(filter);
         } catch (Exception e) {
-            System.err.println("Erro ao deletar mongo" + e);
+            System.err.println("Erro interno mongoDB \n");
+            throw new Exception(e);
             
         }
+
+        
 
         if (empresaDeletada != null) {
             // Converte o Document de volta para um objeto Empresa
