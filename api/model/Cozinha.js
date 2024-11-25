@@ -8,6 +8,7 @@ const CozinhaSchema= new Schema ({
     senha:String,
     telefone:String,
     endereco:String,
+    tipo:String,
 },{
     collection:'Cozinhas' //Especifica o nome da coleção existente no MongoDB
 }

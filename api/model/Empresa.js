@@ -8,6 +8,7 @@ const EmpresaSchema = new Schema ({
     senha:String,
     telefone:String,
     endereco:String,
+    tipo:String,
     
 },{
     collection: 'Empresas'  // Especifica o nome da coleção existente no MongoDB
