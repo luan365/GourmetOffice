@@ -59,7 +59,7 @@ public class CozinhaOperations {
             cozinhas.add(cozinha);
 
     }
-        
+        System.out.println(cozinhas);
         return cozinhas;
     }
 
