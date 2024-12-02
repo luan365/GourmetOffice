@@ -40,7 +40,7 @@ public class CozinhaOperations {
         }
     }
 
-    public  List<Cozinha> getAllCozinhas() {
+    public  List<Cozinha> getAllCozinhas() throws Exception {
         System.out.println("Funcao buscar iniciada");
         List<Cozinha> cozinhas = new ArrayList<>();
 
@@ -63,7 +63,7 @@ public class CozinhaOperations {
         return cozinhas;
     }
 
-    public Cozinha insertCozinha(Cozinha x){
+    public void insertCozinha(Cozinha x){
 
         Gson gson = new Gson();
         String json = gson.toJson(x);
@@ -72,7 +72,7 @@ public class CozinhaOperations {
         collection.insertOne(doc);
 
         System.out.println(doc.toJson());
-        return x;
+        
 
     }
 

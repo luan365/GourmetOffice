@@ -25,7 +25,7 @@ public class ServerJava {
                             // Passa o socket para o Controller para tratar a requisição
                             new Controller(clientSocket).handleRequest();
                         } catch (IOException e) {
-                            System.out.println("DEU BOSTA");
+                            
                             e.printStackTrace();
                         }
                     }).start();
