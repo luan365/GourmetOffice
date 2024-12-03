@@ -53,10 +53,12 @@ public class Controller {
        
         if ("OPTIONS".equals(method)) {
             // Adiciona os headers do CORS
+            
             writer.println("HTTP/1.1 200 OK");
-            writer.println("Access-Control-Allow-Origin: *");
+            writer.println("Access-Control-Allow-Origin: http://localhost:5173");
             writer.println("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
             writer.println("Access-Control-Allow-Headers: Content-Type");
+            writer.println("Access-Control-Allow-Credentials: true");
             writer.println(""); 
             return;
         }
@@ -67,6 +69,7 @@ public class Controller {
 
         
         if ("GET".equals(method)) {
+            
             handled = true;
             if ("/getAllEmpresas".equals(path)) {
                 try {
@@ -74,6 +77,7 @@ public class Controller {
 
                     //Retornando resposta da requisicao
                     writer.println("HTTP/1.1 200 OK");
+                    addCorsHeaders();
                     writer.println("Content-Type: application/json");
                     writer.println(""); // vazio para sinalizar final do header
                     writer.println(gson.toJson(empresas)); //body
@@ -81,6 +85,7 @@ public class Controller {
                     System.err.println("Erro ao listar empresas: " + e);
                     e.printStackTrace();
                     writer.println("HTTP/1.1 400 Bad Request");
+                    addCorsHeaders();
                     writer.println("Content-Type: application/json");
                     writer.println("");
                     writer.println(gson.toJson("Erro ao listar empresas "));
@@ -91,6 +96,7 @@ public class Controller {
                     List<Cozinha> cozinhas = cozinhaOperations.getAllCozinhas();
 
                     writer.println("HTTP/1.1 200 OK");
+                    addCorsHeaders();
                     writer.println("Content-Type: application/json");
                     writer.println("");
                     writer.println(gson.toJson(cozinhas));
@@ -98,6 +104,7 @@ public class Controller {
                     System.err.println("Erro ao listar cozinhas: " + e);
                     e.printStackTrace();
                     writer.println("HTTP/1.1 400 Bad Request");
+                    addCorsHeaders();
                     writer.println("Content-Type: application/json");
                     writer.println("");
                     writer.println(gson.toJson("Erro ao listar cozinhas "));
@@ -108,6 +115,7 @@ public class Controller {
         }
         
         if ("PUT".equals(method)) {
+            
             handled = true;
             String[] validate = null;
             if ("/insertEmpresa".equals(path)) {
@@ -131,6 +139,7 @@ public class Controller {
                     
 
                     writer.println("HTTP/1.1 200 Created");
+                    addCorsHeaders();
                     writer.println("Content-Type: application/json");
                     writer.println("");
                     writer.println(gson.toJson(empresa));
@@ -139,6 +148,7 @@ public class Controller {
                     System.err.println("Erro ao inserir empresa: " + e);
                     e.printStackTrace();
                     writer.println("HTTP/1.1 400 Bad Request");
+                    addCorsHeaders();
                     writer.println("Content-Type: application/json");
                     writer.println("");
                     writer.println(gson.toJson("Erro a inserir empresa: " + validate[0]));
@@ -162,6 +172,7 @@ public class Controller {
                     
 
                     writer.println("HTTP/1.1 200 Created");
+                    addCorsHeaders();
                     writer.println("Content-Type: application/json");
                     writer.println("");
                     writer.println(gson.toJson(cozinha));
@@ -170,6 +181,7 @@ public class Controller {
                     System.err.println("Erro ao inserir Cozinha: " + e);
                     e.printStackTrace();
                     writer.println("HTTP/1.1 400 Bad Request");
+                    addCorsHeaders();
                     writer.println("Content-Type: application/json");
                     writer.println("");
                     writer.println(gson.toJson("Erro a inserir cozinha: " + validate[0]));
@@ -180,6 +192,7 @@ public class Controller {
         }
 
         if ("DELETE".equals(method)) {
+            
             handled = true;
             
             if ("/deleteEmpresa".equals(path)) {
@@ -209,11 +222,13 @@ public class Controller {
 
                     if(deletedEmpresa != null){
                         writer.println("HTTP/1.1 200 Deleted");
+                        addCorsHeaders();
                         writer.println("Content-Type: application/json");
                         writer.println("");
                         writer.println(gson.toJson(deletedEmpresa));
                     }else{
-                        writer.println("HTTP/1.1 200 Deleted");
+                        writer.println("HTTP/1.1 200 Delete Failed");
+                        addCorsHeaders();
                         writer.println("Content-Type: application/json");
                         writer.println("");
                         writer.println("Nenhuma empresa encontrada com CNPJ "+cnpj);
@@ -225,6 +240,7 @@ public class Controller {
                     System.err.println("Erro ao deletar empresa: " + e);
                     e.printStackTrace();
                     writer.println("HTTP/1.1 400 Bad Request");
+                    addCorsHeaders();
                     writer.println("Content-Type: application/json");
                     writer.println("");
                     writer.println(gson.toJson("Erro ao deletar empresa: cnpj invalido"));
@@ -259,11 +275,13 @@ public class Controller {
 
                     if(deletedCozinha != null){
                         writer.println("HTTP/1.1 200 Deleted");
+                        addCorsHeaders();
                         writer.println("Content-Type: application/json");
                         writer.println("");
                         writer.println(gson.toJson(deletedCozinha));
                     }else{
-                        writer.println("HTTP/1.1 200 Deleted");
+                        writer.println("HTTP/1.1 200 Delete Failed");
+                        addCorsHeaders();
                         writer.println("Content-Type: application/json");
                         writer.println("");
                         writer.println("Nenhuma Cozinha* encontrada com CNPJ "+cnpj);
@@ -276,6 +294,7 @@ public class Controller {
                     System.err.println("Erro ao deletar cozinha: " + e);
                     e.printStackTrace();
                     writer.println("HTTP/1.1 400 Bad Request");
+                    addCorsHeaders();
                     writer.println("Content-Type: application/json");
                     writer.println("");
                     writer.println(gson.toJson("Erro ao deletar cozinha: cnpj invalido"));
@@ -286,6 +305,7 @@ public class Controller {
         }
 
         if ("PATCH".equals(method)) {
+            
             handled = true;
             String[] validate = null;
             if ("/updateEmpresa".equals(path)) {
@@ -309,7 +329,8 @@ public class Controller {
                     empresaOperations.updateEmpresa(empresaAtualizada, cnpjEmpresa);
                     
 
-                    writer.println("HTTP/1.1 200 Created");
+                    writer.println("HTTP/1.1 200 Updated");
+                    addCorsHeaders();
                     writer.println("Content-Type: application/json");
                     writer.println("");
                     writer.println(gson.toJson(empresaAtualizada));
@@ -318,9 +339,10 @@ public class Controller {
                     System.err.println("Erro ao atualizar empresa: " + e);
                     e.printStackTrace();
                     writer.println("HTTP/1.1 400 Bad Request");
+                    addCorsHeaders();
                     writer.println("Content-Type: application/json");
                     writer.println("");
-                    writer.println(gson.toJson("Erro a inserir empresa: " + validate[0]));
+                    writer.println(gson.toJson("Erro ao atualizar empresa: " + validate[0]));
                 }
                 
             } else if ("/updateCozinha".equals(path))
@@ -345,18 +367,20 @@ public class Controller {
                     cozinhaOperations.updateCozinha(cozinhaAtualizada, cnpjCozinha);
                     
 
-                    writer.println("HTTP/1.1 200 Created");
+                    writer.println("HTTP/1.1 200 Updated");
+                    addCorsHeaders();
                     writer.println("Content-Type: application/json");
                     writer.println("");
                     writer.println(gson.toJson(cozinhaAtualizada));
 
                 } catch (Exception e) {
-                    System.err.println("Erro ao atualizar empresa: " + e);
+                    System.err.println("Erro ao atualizar Cozinha: " + e);
                     e.printStackTrace();
                     writer.println("HTTP/1.1 400 Bad Request");
+                    addCorsHeaders();
                     writer.println("Content-Type: application/json");
                     writer.println("");
-                    writer.println(gson.toJson("Erro a inserir empresa: " + validate[0]));
+                    writer.println(gson.toJson("Erro ao atualizar cozinha: " + validate[0]));
                 }
             } else {
                 unknownPath();
@@ -365,7 +389,9 @@ public class Controller {
 
         
         if(!handled){sendNotFoundResponse();}
+
         // Fecha o socket
+        
         clientSocket.close();
     }
 
@@ -407,6 +433,12 @@ public class Controller {
         return contentLength;
     }
     
+    private void addCorsHeaders() {
+        writer.println("Access-Control-Allow-Origin: http://localhost:5173");
+        writer.println("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+        writer.println("Access-Control-Allow-Headers: Content-Type");
+        writer.println("Access-Control-Allow-Credentials: true"); // Para permitir cookies, se necessário
+    }
     
 
 }
