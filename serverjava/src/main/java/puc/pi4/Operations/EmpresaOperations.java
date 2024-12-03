@@ -40,7 +40,7 @@ public class EmpresaOperations {
             }
         } 
         
-    public  List<Empresa> getAllEmpresas() {
+    public  List<Empresa> getAllEmpresas() throws Exception {
         
         List<Empresa> empresas = new ArrayList<>();
 
@@ -62,9 +62,31 @@ public class EmpresaOperations {
         return empresas;
     }
 
+    public Empresa getEmpresaByCNPJ(String cnpj){
+        Gson gson = new Gson();
+
+        Document filter = new Document("cnpj", cnpj);
+
+        Document doc = collection.find(filter).first();
+
+        if(doc == null){
+            return null;
+        }else{
+            return gson.fromJson(doc.toJson(), Empresa.class);
+        }
+            
+        
+    }
 
 
-    public Empresa insertEmpresa(Empresa x){
+
+    public void insertEmpresa(Empresa x) throws Exception{
+
+        
+
+        if(getEmpresaByCNPJ(x.getCNPJ())!=null){
+            throw new Exception("Empresa já existe");
+        }
 
         Gson gson = new Gson();
         String json = gson.toJson(x);
@@ -73,11 +95,11 @@ public class EmpresaOperations {
         collection.insertOne(doc);
 
         
-        return x;
+        
  
     }
 
-    public Empresa updateEmpresa(Empresa x, String cnpj){
+    public void updateEmpresa(Empresa x, String cnpj){
         Gson gson = new Gson();
         String json = gson.toJson(x);
 
@@ -95,10 +117,6 @@ public class EmpresaOperations {
             System.err.println("Erro ao atualizar" + e);
         }
         
-
-        return x;
-
-
 
     }
 

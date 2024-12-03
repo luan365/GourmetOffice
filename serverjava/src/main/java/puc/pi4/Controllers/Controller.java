@@ -1,270 +1,448 @@
 package puc.pi4.Controllers;
 
-//Controla todas as requisições HTTP
-
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
+import java.io.PrintWriter;
+import java.net.Socket;
 import java.util.List;
 
 import com.google.gson.Gson;
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import puc.pi4.Entities.Cozinha;
 import puc.pi4.Entities.Empresa;
 import puc.pi4.Operations.CozinhaOperations;
 import puc.pi4.Operations.EmpresaOperations;
 
-public class Controller implements HttpHandler {
+public class Controller {
+    //Instanciando classes para operações com as entidades
     private final EmpresaOperations empresaOperations = new EmpresaOperations();
     private final CozinhaOperations cozinhaOperations = new CozinhaOperations();
     private final Gson gson = new Gson();
 
-    @Override
-    public void handle(HttpExchange exchange) throws IOException {
-        String method = exchange.getRequestMethod();
-        // extrai o caminho da URI da requisição HTTP feita ao servidor e o armazena na variável path. 
-        //Esse caminho pode então ser usado para verificar qual recurso ou endpoint o cliente está tentando acessa
-        String path = exchange.getRequestURI().getPath();
-        String response = "";
+    //Iniciando socket e bufferedReader
+    private final Socket clientSocket;
+    private final BufferedReader reader;
+    private final PrintWriter writer;
 
-  // Adicionando cabeçalhos CORS
-  exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "http://localhost:5173"); // Permite acesso 
-  exchange.getResponseHeaders().add("Access-Control-Allow-Methods", "GET, PUT, PATCH, DELETE, OPTIONS"); // Métodos permitidos
-  exchange.getResponseHeaders().add("Access-Control-Allow-Headers", "Content-Type, Authorization"); // Cabeçalhos permitidos
-  exchange.getResponseHeaders().add("Access-Control-Allow-Credentials", "true"); // Permite enviar cookies
+    // "construtor" do controller, inicia o socket e os readers.
+    public Controller(Socket clientSocket) throws IOException {
+        this.clientSocket = clientSocket;
+        this.reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+        this.writer = new PrintWriter(clientSocket.getOutputStream(), true);
+    }
 
-  // Verifica se é uma requisição OPTIONS (preflight request)
-  if ("OPTIONS".equals(method)) {
-      // Se for uma requisição OPTIONS, apenas responda com status 200 e os cabeçalhos de CORS
-      exchange.sendResponseHeaders(200, -1);
-      return;
-  }
+    //Metodo chamado em "serverjava.java", basicamente e o que escuta requisicoes a qualquer momento
+    public void handleRequest() throws IOException {
+        
 
 
-        System.out.println("MÉTODO CHAMADO " + method);
-        System.out.println("CAMINHO : "+path);
 
+        String requestLine = reader.readLine();
+        if (requestLine == null) {
+            return;
+        }
 
-        //Switch getter ->
-        if("GET".equals(method)){
+        // Concatenando a request
+        String[] requestParts = requestLine.split(" ");
+        String method = requestParts[0]; // Metodo (GET,DELETE...)
+        String path = requestParts[1]; // Caminho (GetAllEmpresas, DeleteEmpresa....)
 
-            if("/getAllEmpresas".equals(path)){
+       
+        if ("OPTIONS".equals(method)) {
+            // Adiciona os headers do CORS
+            
+            writer.println("HTTP/1.1 200 OK");
+            writer.println("Access-Control-Allow-Origin: http://localhost:5173");
+            writer.println("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+            writer.println("Access-Control-Allow-Headers: Content-Type");
+            writer.println("Access-Control-Allow-Credentials: true");
+            writer.println(""); 
+            return;
+        }
+
+        
+        //Flag para saber se caiu em algum metodo valido
+        boolean handled = false;
+
+        
+        if ("GET".equals(method)) {
+            
+            handled = true;
+            if ("/getAllEmpresas".equals(path)) {
                 try {
                     List<Empresa> empresas = empresaOperations.getAllEmpresas();
-                    response = gson.toJson(empresas);
-                    
-                    exchange.sendResponseHeaders(200, response.getBytes(StandardCharsets.UTF_8).length);
+
+                    //Retornando resposta da requisicao
+                    writer.println("HTTP/1.1 200 OK");
+                    addCorsHeaders();
+                    writer.println("Content-Type: application/json");
+                    writer.println(""); // vazio para sinalizar final do header
+                    writer.println(gson.toJson(empresas)); //body
                 } catch (Exception e) {
-                    System.err.println("Erro ao buscar todas empresas " + e);
+                    System.err.println("Erro ao listar empresas: " + e);
                     e.printStackTrace();
-                    response = gson.toJson("Erro ao processar a solicitação.");
-                    exchange.sendResponseHeaders(400, response.getBytes(StandardCharsets.UTF_8).length);
+                    writer.println("HTTP/1.1 400 Bad Request");
+                    addCorsHeaders();
+                    writer.println("Content-Type: application/json");
+                    writer.println("");
+                    writer.println(gson.toJson("Erro ao listar empresas "));
                 }
-            }
-
-            if("/getEmpresaBy".equals(path)){}
-
-            if("/getCozinhaBy".equals(path)){}
-            
-            if("/getAllCozinhas".equals(path)){
+            } 
+            else if ("/getAllCozinhas".equals(path)) {
                 try {
-                        
                     List<Cozinha> cozinhas = cozinhaOperations.getAllCozinhas();
-                    response = gson.toJson(cozinhas);
-                    
-                    exchange.sendResponseHeaders(200, response.getBytes(StandardCharsets.UTF_8).length);
-                    } catch (Exception e) {
-                        System.err.println("Erro ao buscar todas as cozinhas " + e);
-                        e.printStackTrace();
-                        response = gson.toJson("Erro ao processar a solicitação.");
-                        exchange.sendResponseHeaders(400, response.getBytes(StandardCharsets.UTF_8).length);
-                    }
-            }
-        }
 
-        
-        
-         //Switch Insert ->
-        if("PUT".equals(method)){
-
-            if("/insertEmpresa".equals(path)){
-                System.out.println("INSERINDO EMPRESA");
-                try {    
-                Empresa empresa = gson.fromJson(new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8), Empresa.class);
-                System.out.println(empresa.toString() );
-                Empresa addedEmpresa = empresaOperations.insertEmpresa(empresa);
-                response = gson.toJson(addedEmpresa);
-                exchange.sendResponseHeaders(201, response.getBytes(StandardCharsets.UTF_8).length);
+                    writer.println("HTTP/1.1 200 OK");
+                    addCorsHeaders();
+                    writer.println("Content-Type: application/json");
+                    writer.println("");
+                    writer.println(gson.toJson(cozinhas));
                 } catch (Exception e) {
-                    System.err.println("Erro ao inserir empresa "+e);
+                    System.err.println("Erro ao listar cozinhas: " + e);
                     e.printStackTrace();
-                    response = gson.toJson("Erro ao processar a solicitação.");
-                    exchange.sendResponseHeaders(400, response.getBytes(StandardCharsets.UTF_8).length);
-
+                    writer.println("HTTP/1.1 400 Bad Request");
+                    addCorsHeaders();
+                    writer.println("Content-Type: application/json");
+                    writer.println("");
+                    writer.println(gson.toJson("Erro ao listar cozinhas "));
                 }
-            }
-                
-            if("/insertCozinha".equals(path)){
-                System.out.println("INSERINDO COZINHA");
-                try {   
-                    Cozinha cozinha = gson.fromJson(new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8), Cozinha.class);
-                    
-                    Cozinha addedCozinha = cozinhaOperations.insertCozinha(cozinha);
-                    response = gson.toJson(addedCozinha);//configurando a resposta json
-                    exchange.sendResponseHeaders(201, response.getBytes(StandardCharsets.UTF_8).length);   
-                    } catch (Exception e) {
-                        System.err.println("Erro ao inserir cozinha "+e);
-                        e.printStackTrace();
-                        response = gson.toJson("Erro ao processar a solicitação.");
-                        exchange.sendResponseHeaders(400, response.getBytes(StandardCharsets.UTF_8).length);
-                    }
+            } else {
+                unknownPath();
             }
         }
-    
-    
-
-        if("PATCH".equals(method)){
-
-            if("updateEmpresa".equals(path)){
-                try {
-                            
-                    
-                    Empresa empresaAtualizada = gson.fromJson(new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8), Empresa.class);
-                    String cnpjEmpresa = empresaAtualizada.getCNPJ();
-                    
-
-                    Empresa empresaUpdate = empresaOperations.updateEmpresa(empresaAtualizada, cnpjEmpresa);
-                    response = gson.toJson(empresaUpdate);
-                    exchange.sendResponseHeaders(201, response.getBytes(StandardCharsets.UTF_8).length);                        
-                    } catch (Exception e) {
-                        System.err.println("Erro ao atualizar empresa "+e);
-                        e.printStackTrace();
-                        response = gson.toJson("Erro ao processar a solicitação.");
-                        exchange.sendResponseHeaders(400, response.getBytes(StandardCharsets.UTF_8).length);
-                    }
-            }
-
+        
+        if ("PUT".equals(method)) {
             
-            if("updateCozinha".equals(path)){
+            handled = true;
+            String[] validate = null;
+            if ("/insertEmpresa".equals(path)) {
                 try {
-                            
+                    //------------Separa o body da requisicao HTTP-----------
+                    int contentLength = getContentLength();
+                    if (contentLength == 0) {
+                        throw new IllegalArgumentException("Content-Length não especificado ou é zero.");
+                    }
+                    String requestBody = readRequestBody(contentLength);
+                    //--------------------------------------------------------
+
+                    Empresa empresa = gson.fromJson(requestBody, Empresa.class);
+                    validate = empresa.validate();
+
+                    //Funcao que valida as informacoes do objeto da classe empresa, porque o gson, que transforma JSON em objetos JAVA, acaba nao usando o construtor da classe EMPRESA.
+                    if(validate[1] == "false"){
+                        throw new Exception(validate[0]);
+                    }
+
+                
+
                     
-                    Cozinha cozinhaAtualizada = gson.fromJson(new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8), Cozinha.class);
-                    String cnpjCozinha = cozinhaAtualizada.getCNPJ();
+                    empresaOperations.insertEmpresa(empresa);
                     
 
-                    Cozinha cozinhaUpdate = cozinhaOperations.updateCozinha(cozinhaAtualizada, cnpjCozinha);
-                    response = gson.toJson(cozinhaUpdate);
-                    exchange.sendResponseHeaders(201, response.getBytes(StandardCharsets.UTF_8).length);   
-                    } catch (Exception e) {
-                        System.err.println("Erro ao atualizar cozinha "+e);
-                        e.printStackTrace();
-                        response = gson.toJson("Erro ao processar a solicitação.");
-                        exchange.sendResponseHeaders(400, response.getBytes(StandardCharsets.UTF_8).length);
-                    }                
+                    writer.println("HTTP/1.1 200 Created");
+                    addCorsHeaders();
+                    writer.println("Content-Type: application/json");
+                    writer.println("");
+                    writer.println(gson.toJson(empresa));
+                    
+                } catch (Exception e) {
+                    System.err.println("Erro ao inserir empresa: " + e);
+                    e.printStackTrace();
+                    writer.println("HTTP/1.1 400 Bad Request");
+                    addCorsHeaders();
+                    writer.println("Content-Type: application/json");
+                    writer.println("");
+                    writer.println(gson.toJson("Erro a inserir empresa: " + e));
+                }
+                
+            } else if ("/insertCozinha".equals(path)) {
+                try {
+                    int contentLength = getContentLength();
+                    if (contentLength == 0) {
+                        throw new IllegalArgumentException("Content-Length não especificado ou é zero.");
+                    }
+                    String requestBody = readRequestBody(contentLength);
+
+                    Cozinha cozinha = gson.fromJson(requestBody, Cozinha.class);
+                    validate = cozinha.validate();
+
+                    if(validate[1] == "false"){
+                        throw new Exception(validate[0]);
+                    }
+                        cozinhaOperations.insertCozinha(cozinha);
+                    
+
+                    writer.println("HTTP/1.1 200 Created");
+                    addCorsHeaders();
+                    writer.println("Content-Type: application/json");
+                    writer.println("");
+                    writer.println(gson.toJson(cozinha));
+
+                } catch (Exception e) {
+                    System.err.println("Erro ao inserir Cozinha: " + e);
+                    e.printStackTrace();
+                    writer.println("HTTP/1.1 400 Bad Request");
+                    addCorsHeaders();
+                    writer.println("Content-Type: application/json");
+                    writer.println("");
+                    writer.println(gson.toJson("Erro a inserir cozinha: " + e));
+                }
+            } else {
+                unknownPath();
             }
         }
 
-        if("DELETE".equals(method)){
+        if ("DELETE".equals(method)) {
+            
+            handled = true;
+            
+            if ("/deleteEmpresa".equals(path)) {
+                try {
+                    int contentLength = getContentLength();
+                    if (contentLength == 0) {
+                        throw new IllegalArgumentException("Content-Length não especificado ou é zero.");
+                    }
+                    String requestBody = readRequestBody(contentLength);
+                    JsonObject jsonObject = JsonParser.parseString(requestBody).getAsJsonObject();
+                    if (!jsonObject.has("cnpj")) {
+                        throw new IllegalArgumentException("CNPJ não encontrado no corpo da requisição.");
+                    }
 
-            if("/deleteEmpresa".equals(path)){
-                String erro = null;
-                try(InputStreamReader reader = new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8)) {
-                    
-                    
-
-                    CNPJRequest cnpjRequest = gson.fromJson(reader, CNPJRequest.class);
-                    String cnpj = cnpjRequest.cnpj;
+                    String cnpj = jsonObject.get("cnpj").getAsString();
 
                     if (cnpj == null || cnpj.isEmpty() || cnpj.length()!=14) {
-                        erro = "CNPJ não pode ser nulo ou vazio e deve ter 14 digitos.";
-                        throw new IllegalArgumentException("");
-                        
+                        throw new IllegalArgumentException("CNPJ nao pode ser nulo ou vazio e deve ter 14 digitos.");
                     }
 
                     if (!cnpj.matches("[0-9]+"))
                     {
-                        erro = "CNPJ deve ser uma string de inteiros";
-                        throw new IllegalArgumentException();
+                        throw new IllegalArgumentException("CNPJ nao deve ter caracteres nao numericos");
                     }
 
                     Empresa deletedEmpresa = empresaOperations.deleteEmpresa(cnpj);
-                
-                    if (deletedEmpresa != null) {
-                        response = gson.toJson(deletedEmpresa);
-                        exchange.sendResponseHeaders(200, response.getBytes(StandardCharsets.UTF_8).length);
-                    } else {
-                        // Retorna erro se nenhuma empresa foi encontrada com o CNPJ fornecido
-                        response = gson.toJson("Empresa com CNPJ " + cnpj + " não encontrada.");
-                        exchange.sendResponseHeaders(404, response.getBytes(StandardCharsets.UTF_8).length);
+
+                    if(deletedEmpresa != null){
+                        writer.println("HTTP/1.1 200 Deleted");
+                        addCorsHeaders();
+                        writer.println("Content-Type: application/json");
+                        writer.println("");
+                        writer.println(gson.toJson(deletedEmpresa));
+                    }else{
+                        writer.println("HTTP/1.1 200 Delete Failed");
+                        addCorsHeaders();
+                        writer.println("Content-Type: application/json");
+                        writer.println("");
+                        writer.println("Nenhuma empresa encontrada com CNPJ "+cnpj);
                     }
-                
-                
+
+                    
+
                 } catch (Exception e) {
-                    System.err.println("Erro ao deletar empresa "+e);
+                    System.err.println("Erro ao deletar empresa: " + e);
                     e.printStackTrace();
-                    response = gson.toJson(erro);
-                    exchange.sendResponseHeaders(400, response.getBytes(StandardCharsets.UTF_8).length);
+                    writer.println("HTTP/1.1 400 Bad Request");
+                    addCorsHeaders();
+                    writer.println("Content-Type: application/json");
+                    writer.println("");
+                    writer.println(gson.toJson("Erro ao deletar empresa: cnpj invalido"));
+                    
                 }
-            }
+                
+            } else if ("/deleteCozinha".equals(path)) {
+                try {
 
-            
-            if("/deleteCozinha".equals(path)){
-                String erro = null;
-                try(InputStreamReader reader = new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8)) {
-                    
-                    
+                    int contentLength = getContentLength();
+                    if (contentLength == 0) {
+                        throw new IllegalArgumentException("Content-Length não especificado ou é zero.");
+                    }
+                    String requestBody = readRequestBody(contentLength);
+                    JsonObject jsonObject = JsonParser.parseString(requestBody).getAsJsonObject();
+                    if (!jsonObject.has("cnpj")) {
+                        throw new IllegalArgumentException("CNPJ não encontrado no corpo da requisição.");
+                    }
 
-                    CNPJRequest cnpjRequest = gson.fromJson(reader, CNPJRequest.class);
-                    String cnpj = cnpjRequest.cnpj;
+                    String cnpj = jsonObject.get("cnpj").getAsString();
 
                     if (cnpj == null || cnpj.isEmpty() || cnpj.length()!=14) {
-                        erro = "CNPJ não pode ser nulo ou vazio e deve ter 14 digitos.";
-                        throw new IllegalArgumentException("");
-                        
+                        throw new IllegalArgumentException("CNPJ nao pode ser nulo ou vazio e deve ter 14 digitos.");
                     }
 
                     if (!cnpj.matches("[0-9]+"))
                     {
-                        erro = "CNPJ deve ser uma string de inteiros";
-                        throw new IllegalArgumentException();
+                        throw new IllegalArgumentException("CNPJ nao deve ter caracteres nao numericos");
                     }
 
                     Cozinha deletedCozinha = cozinhaOperations.deleteCozinha(cnpj);
-                
-                    if (deletedCozinha != null) {
-                        response = gson.toJson(deletedCozinha);
-                        exchange.sendResponseHeaders(200, response.getBytes(StandardCharsets.UTF_8).length);
-                    } else {
-                        // Retorna erro se nenhuma empresa foi encontrada com o CNPJ fornecido
-                        response = gson.toJson("Cozinha com CNPJ " + cnpj + " não encontrada.");
-                        exchange.sendResponseHeaders(404, response.getBytes(StandardCharsets.UTF_8).length);
+
+                    if(deletedCozinha != null){
+                        writer.println("HTTP/1.1 200 Deleted");
+                        addCorsHeaders();
+                        writer.println("Content-Type: application/json");
+                        writer.println("");
+                        writer.println(gson.toJson(deletedCozinha));
+                    }else{
+                        writer.println("HTTP/1.1 200 Delete Failed");
+                        addCorsHeaders();
+                        writer.println("Content-Type: application/json");
+                        writer.println("");
+                        writer.println("Nenhuma Cozinha* encontrada com CNPJ "+cnpj);
                     }
-                
-                
+
+
+
+
                 } catch (Exception e) {
-                    System.err.println("Erro ao deletar Cozinha "+e);
+                    System.err.println("Erro ao deletar cozinha: " + e);
                     e.printStackTrace();
-                    response = gson.toJson(erro);
-                    exchange.sendResponseHeaders(400, response.getBytes(StandardCharsets.UTF_8).length);
+                    writer.println("HTTP/1.1 400 Bad Request");
+                    addCorsHeaders();
+                    writer.println("Content-Type: application/json");
+                    writer.println("");
+                    writer.println(gson.toJson("Erro ao deletar cozinha: cnpj invalido"));
                 }
+            } else {
+                unknownPath();
             }
         }
-       
 
+        if ("PATCH".equals(method)) {
+            
+            handled = true;
+            String[] validate = null;
+            if ("/updateEmpresa".equals(path)) {
+                try {
+                    int contentLength = getContentLength();
+                    if (contentLength == 0) {
+                        throw new IllegalArgumentException("Content-Length não especificado ou é zero.");
+                    }
+                    String requestBody = readRequestBody(contentLength);
 
-        try (OutputStream os = exchange.getResponseBody()) {
-            os.write(response.getBytes(StandardCharsets.UTF_8));
-            System.out.println("Resposta enviada com sucesso.");
-        } catch (IOException e) {
-            System.err.println("Erro ao enviar a resposta: " + e.getMessage());
-            e.printStackTrace();
+                    Empresa empresaAtualizada = gson.fromJson(requestBody, Empresa.class);
+                    validate = empresaAtualizada.validate();
+
+                    if(validate[1] == "false"){
+                        throw new Exception(validate[0]);
+                    }
+
+                    String cnpjEmpresa = empresaAtualizada.getCNPJ();
+                   
+                  
+                    empresaOperations.updateEmpresa(empresaAtualizada, cnpjEmpresa);
+                    
+
+                    writer.println("HTTP/1.1 200 Updated");
+                    addCorsHeaders();
+                    writer.println("Content-Type: application/json");
+                    writer.println("");
+                    writer.println(gson.toJson(empresaAtualizada));
+
+                } catch (Exception e) {
+                    System.err.println("Erro ao atualizar empresa: " + e);
+                    e.printStackTrace();
+                    writer.println("HTTP/1.1 400 Bad Request");
+                    addCorsHeaders();
+                    writer.println("Content-Type: application/json");
+                    writer.println("");
+                    writer.println(gson.toJson("Erro ao atualizar empresa: " + validate[0]));
+                }
+                
+            } else if ("/updateCozinha".equals(path))
+            {
+                try {
+                    int contentLength = getContentLength();
+                    if (contentLength == 0) {
+                        throw new IllegalArgumentException("Content-Length não especificado ou é zero.");
+                    }
+                    String requestBody = readRequestBody(contentLength);
+
+                    Cozinha cozinhaAtualizada = gson.fromJson(requestBody, Cozinha.class);
+                    validate = cozinhaAtualizada.validate();
+
+                    if(validate[1] == "false"){
+                        throw new Exception(validate[0]);
+                    }
+
+                    String cnpjCozinha = cozinhaAtualizada.getCNPJ();
+                   
+                  
+                    cozinhaOperations.updateCozinha(cozinhaAtualizada, cnpjCozinha);
+                    
+
+                    writer.println("HTTP/1.1 200 Updated");
+                    addCorsHeaders();
+                    writer.println("Content-Type: application/json");
+                    writer.println("");
+                    writer.println(gson.toJson(cozinhaAtualizada));
+
+                } catch (Exception e) {
+                    System.err.println("Erro ao atualizar Cozinha: " + e);
+                    e.printStackTrace();
+                    writer.println("HTTP/1.1 400 Bad Request");
+                    addCorsHeaders();
+                    writer.println("Content-Type: application/json");
+                    writer.println("");
+                    writer.println(gson.toJson("Erro ao atualizar cozinha: " + validate[0]));
+                }
+            } else {
+                unknownPath();
+            }
         }
 
+        
+        if(!handled){sendNotFoundResponse();}
 
+        // Fecha o socket
 
+        clientSocket.close();
     }
+
+    //------------------------------------------------ FUNCOES SEPARADAS PARA LIMPAR O CODIGO-------------------------------------------
+
+
+    private void sendNotFoundResponse() {
+        writer.println("HTTP/1.1 404 Not Found");
+        writer.println("Content-Type: text/plain");
+        writer.println(""); 
+        writer.println("404 No Method Found");
+    }
+
+    private void unknownPath() {
+        writer.println("HTTP/1.1 404 Not Found");
+        writer.println("Content-Type: text/plain");
+        writer.println("");
+        writer.println("404 Path not found");
+    }
+
+
+    private String readRequestBody(int contentLength) throws IOException {
+        char[] buffer = new char[contentLength];
+        reader.read(buffer, 0, contentLength);
+        return new String(buffer);
+    }
+    
+
+    private int getContentLength() throws IOException {
+        String line;
+        int contentLength = 0;
+    
+        while ((line = reader.readLine()) != null && !line.isEmpty()) {
+            if (line.startsWith("Content-Length:")) {
+                contentLength = Integer.parseInt(line.split(":")[1].trim());
+            }
+        }
+    
+        return contentLength;
+    }
+    
+    private void addCorsHeaders() {
+        writer.println("Access-Control-Allow-Origin: http://localhost:5173");
+        writer.println("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+        writer.println("Access-Control-Allow-Headers: Content-Type");
+        writer.println("Access-Control-Allow-Credentials: true"); // Para permitir cookies, se necessário
+    }
+    
+
 }
