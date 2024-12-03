@@ -135,7 +135,11 @@ public class Controller {
                     if(validate[1] == "false"){
                         throw new Exception(validate[0]);
                     }
-                        empresaOperations.insertEmpresa(empresa);
+
+                
+
+                    
+                    empresaOperations.insertEmpresa(empresa);
                     
 
                     writer.println("HTTP/1.1 200 Created");
@@ -143,7 +147,7 @@ public class Controller {
                     writer.println("Content-Type: application/json");
                     writer.println("");
                     writer.println(gson.toJson(empresa));
-
+                    
                 } catch (Exception e) {
                     System.err.println("Erro ao inserir empresa: " + e);
                     e.printStackTrace();
@@ -151,7 +155,7 @@ public class Controller {
                     addCorsHeaders();
                     writer.println("Content-Type: application/json");
                     writer.println("");
-                    writer.println(gson.toJson("Erro a inserir empresa: " + validate[0]));
+                    writer.println(gson.toJson("Erro a inserir empresa: " + e));
                 }
                 
             } else if ("/insertCozinha".equals(path)) {
@@ -184,7 +188,7 @@ public class Controller {
                     addCorsHeaders();
                     writer.println("Content-Type: application/json");
                     writer.println("");
-                    writer.println(gson.toJson("Erro a inserir cozinha: " + validate[0]));
+                    writer.println(gson.toJson("Erro a inserir cozinha: " + e));
                 }
             } else {
                 unknownPath();
@@ -391,7 +395,7 @@ public class Controller {
         if(!handled){sendNotFoundResponse();}
 
         // Fecha o socket
-        
+
         clientSocket.close();
     }
 

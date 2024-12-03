@@ -69,14 +69,24 @@ public class EmpresaOperations {
 
         Document doc = collection.find(filter).first();
 
-        
+        if(doc == null){
+            return null;
+        }else{
+            return gson.fromJson(doc.toJson(), Empresa.class);
+        }
             
-        return gson.fromJson(doc.toJson(), Empresa.class);
+        
     }
 
 
 
-    public void insertEmpresa(Empresa x){
+    public void insertEmpresa(Empresa x) throws Exception{
+
+        
+
+        if(getEmpresaByCNPJ(x.getCNPJ())!=null){
+            throw new Exception("Empresa já existe");
+        }
 
         Gson gson = new Gson();
         String json = gson.toJson(x);

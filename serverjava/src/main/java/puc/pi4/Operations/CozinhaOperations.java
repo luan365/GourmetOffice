@@ -18,6 +18,7 @@ import com.mongodb.client.model.FindOneAndUpdateOptions;
 import puc.pi4.Entities.Cozinha;
 
 
+
 public class CozinhaOperations {
     private MongoCollection<Document> collection;
     
@@ -63,7 +64,28 @@ public class CozinhaOperations {
         return cozinhas;
     }
 
-    public void insertCozinha(Cozinha x){
+    public Cozinha getCozinhaByCNPJ(String cnpj){
+        Gson gson = new Gson();
+
+        Document filter = new Document("cnpj", cnpj);
+
+        Document doc = collection.find(filter).first();
+
+        if(doc == null){
+            return null;
+        }else{
+            return gson.fromJson(doc.toJson(), Cozinha.class);
+        }
+            
+        
+    }
+
+    public void insertCozinha(Cozinha x) throws Exception{
+
+        if(getCozinhaByCNPJ(x.getCNPJ())!=null){
+            throw new Exception("Cozinha já existe");
+        }
+
 
         Gson gson = new Gson();
         String json = gson.toJson(x);

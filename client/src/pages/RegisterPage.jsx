@@ -69,9 +69,10 @@ export default function RegisterPage() {
 
     ev.preventDefault();
     try{
+      var success = false;
 
       if(cozinha==true){
-
+        
         
 
         await axios.put('http://localhost:8080/insertCozinha',{
@@ -83,8 +84,23 @@ export default function RegisterPage() {
           telefone,
           descricao,
           tipo
-        });
-        alert('Sua cozinha foi cadastrada com sucesso!');
+        }).then(response=>{
+          success = true;
+          alert('Sua cozinha foi cadastrada com sucesso!');
+          console.log('Success:', response.data);
+        }).catch(error=>{
+          if (error.response) {
+            // O servidor respondeu com um código de status fora do intervalo 2xx
+            console.error('Server Error:', error.response.data);
+          } else if (error.request) {
+              // A requisição foi feita, mas não houve resposta
+              console.error('Network Error:', error.request);
+          } else {
+              // Outro erro que ocorreu durante a configuração da requisição
+              console.error('Error:', error.message);
+          }
+        })
+        
         
       }
 
@@ -100,14 +116,32 @@ export default function RegisterPage() {
           cnpj,
           telefone,
           tipo
-        });
-        alert('Empresa cadastrada');
+        }).then(response =>{
+          success = true;
+          alert('Empresa cadastrada');
+          console.log('Success:', response.data);
+        }).catch(error=>{
+          if (error.response) {
+            // O servidor respondeu com um código de status fora do intervalo 2xx
+            console.error('Server Error:', error.response.data);
+          } else if (error.request) {
+              // A requisição foi feita, mas não houve resposta
+              console.error('Network Error:', error.request);
+          } else {
+              // Outro erro que ocorreu durante a configuração da requisição
+              console.error('Error:', error.message);
+          }
+        })
+        
         
       }
 
-      setTimeout(() => {
-        navigate("/login");
-      }, 300);
+      if(success){
+        setTimeout(() => {
+          navigate("/login");
+        }, 300);
+      }
+      
     }catch(e){
       alert('registro falhou ' + e)//adicionar possiveis erros, esse email já esta em uso por exemplo
     }
