@@ -1,10 +1,7 @@
 package puc.pi4.Operations;
 
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
 import org.bson.Document;
 
@@ -23,22 +20,13 @@ public class CozinhaOperations {
     private MongoCollection<Document> collection;
     
     public CozinhaOperations(){
-                try {
-            Properties prop = new Properties();
-            prop.load(new FileInputStream("serverjava/src/main/resources/db.properties"));
-            String user = prop.getProperty("db_user");
-            String pass = prop.getProperty("db_password");
-
-            String uri = String.format("mongodb+srv://%s:%s@gourmetoffice.fnzzv.mongodb.net/", user,pass);
 
             // Conectando ao MongoDB Atlas
             MongoClient mongoClient = MongoClients.create("mongodb+srv://bruno:123456qwerty@gourmetoffice.fnzzv.mongodb.net/");
             MongoDatabase database = mongoClient.getDatabase("GourmetOffice");
             this.collection = database.getCollection("Cozinhas");
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+     
     }
 
     public  List<Cozinha> getAllCozinhas() throws Exception {
