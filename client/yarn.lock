@@ -897,7 +897,8 @@ chokidar@^3.5.3:
   version "0.0.0"
   dependencies:
     autoprefixer "^10.4.20"
-    client "file:../../../../AppData/Local/Yarn/Cache/v6/npm-client-0.0.0-49b32a81-161a-4ee1-a619-247d431b8c72-1731584542797/node_modules/client"
+    axios "^1.7.7"
+    client "file:../../AppData/Local/Yarn/Cache/v6/npm-client-0.0.0-d1a81cf8-e100-4038-ad58-a9cec0d6ac88-1733279978989/node_modules/client"
     postcss "^8.4.47"
     react "^18.3.1"
     react-dom "^18.3.1"
@@ -2272,6 +2273,11 @@ react-dom@^18.3.1:
   dependencies:
     loose-envify "^1.1.0"
     scheduler "^0.23.2"
+
+react-icons@^5.4.0:
+  version "5.4.0"
+  resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-5.4.0.tgz#443000f6e5123ee1b21ea8c0a716f6e7797f7416"
+  integrity sha512-7eltJxgVt7X64oHh6wSWNwwbKTCtMfK35hcjvJS0yxEAhPM8oUKdS3+kqaW1vicIltw+kR2unHaa12S9pPALoQ==
 
 react-is@^16.13.1:
   version "16.13.1"
