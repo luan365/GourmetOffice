@@ -149,8 +149,25 @@ app.put('/logout',(req,res)=>{
   console.log("entrou no index logout")
   res.cookie('token','').json("saiu")
 })
-  
- 
+
+// Endpoint para obter todas as empresas cadastradas
+app.get('/getEmpresa', async (req, res) => {
+  try {
+    // Buscando todas as empresas no banco de dados
+    const empresas = await EmpresaModel.find();
+
+    if (empresas.length === 0) {
+      return res.status(404).json({ message: 'Nenhuma empresa encontrada.' });
+    }
+
+    // Retorna as empresas encontradas
+    return res.json(empresas);
+  } catch (error) {
+    console.error('Erro ao buscar empresas:', error);
+    res.status(500).json({ message: 'Erro interno do servidor' });
+  }
+});
+
 
 
 app.listen(4000);
