@@ -19,6 +19,8 @@ export default function RegisterPage() {
   const navigate = useNavigate();
 
   async function registerUser(ev) {
+    ev.preventDefault();
+    
     // Validações
     if (!cozinha && !empresa) {
       alert("Por favor, selecione uma opção: Cozinha ou Empresa.");
@@ -79,6 +81,8 @@ export default function RegisterPage() {
           alert('Sua cozinha foi cadastrada com sucesso!');
         }).catch(error => {
           console.error('Erro ao cadastrar cozinha:', error.message);
+          alert('Erro ao cadastrar Cozinha:'+ error.response.data);
+          
         });
       }
 
@@ -96,6 +100,7 @@ export default function RegisterPage() {
           alert('Empresa cadastrada com sucesso!');
         }).catch(error => {
           console.error('Erro ao cadastrar empresa:', error.message);
+          alert('Erro ao cadastrar empresa:', error.response.data);
         });
       }
 

@@ -169,9 +169,10 @@ public class Controller {
                     Cozinha cozinha = gson.fromJson(requestBody, Cozinha.class);
                     validate = cozinha.validate();
 
-                    if(validate[1] == "false"){
+                    if (!validate[1].equals("false")) {
                         throw new Exception(validate[0]);
                     }
+                    
                         cozinhaOperations.insertCozinha(cozinha);
                     
 

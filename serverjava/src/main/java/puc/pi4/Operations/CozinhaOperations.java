@@ -1,5 +1,6 @@
 package puc.pi4.Operations;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,11 +16,11 @@ import com.mongodb.client.model.FindOneAndUpdateOptions;
 import puc.pi4.Entities.Cozinha;
 
 
-
 public class CozinhaOperations {
     private MongoCollection<Document> collection;
     
-    public CozinhaOperations(){
+    public CozinhaOperations() throws IOException{
+
 
             // Conectando ao MongoDB Atlas
             MongoClient mongoClient = MongoClients.create("mongodb+srv://bruno:123456qwerty@gourmetoffice.fnzzv.mongodb.net/");
@@ -68,20 +69,47 @@ public class CozinhaOperations {
         
     }
 
+    public Cozinha getCozinhaByEmail(String email){
+        Gson gson = new Gson();
+
+        Document filter = new Document("email", email);
+
+        Document doc = collection.find(filter).first();
+
+        if(doc == null){
+            return null;
+        }else{
+            return gson.fromJson(doc.toJson(), Cozinha.class);
+        }
+            
+        
+    }
+
     public void insertCozinha(Cozinha x) throws Exception{
 
         if(getCozinhaByCNPJ(x.getCNPJ())!=null){
-            throw new Exception("Cozinha já existe");
+            throw new Exception("CNPJ já cadastrado");
+           
         }
+        if(getCozinhaByEmail(x.getEmail())!=null){
+            throw new Exception("Email já cadastrado");
+           
+        }
+
+    
+
 
 
         Gson gson = new Gson();
         String json = gson.toJson(x);
-
+        System.out.println("JSON gerado: " + json);  // Log para verificar o JSON
         Document doc = Document.parse(json);
+        
         collection.insertOne(doc);
 
         System.out.println(doc.toJson());
+        
+
         
 
     }
@@ -129,7 +157,7 @@ public class CozinhaOperations {
         
 
         if (cozinhaDeletada != null) {
-            // Converte o Document de volta para um objeto Empresa
+            // Converte o Document de volta para um objeto cozinha
             Gson gson = new Gson();
             
             return gson.fromJson(cozinhaDeletada.toJson(), Cozinha.class);

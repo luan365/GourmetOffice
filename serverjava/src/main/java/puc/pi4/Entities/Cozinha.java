@@ -37,6 +37,9 @@ public class Cozinha {
     public String getCNPJ(){
         return this.cnpj;
     }
+    public String getEmail(){
+        return this.email;
+    }
 
     public String[] validate(){
         String[] ret = {"",""};
