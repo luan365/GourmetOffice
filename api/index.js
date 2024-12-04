@@ -79,36 +79,61 @@ app.get('/teste',async (req,res)=>{
 });
 
 
-app.put('/login/empresa',async(req,res)=>{
-const {email,senha}=req.body;
-console.log('Requisição recebida com:', req.body);
-const empresa = await EmpresaModel.findOne({email,senha});
-if (empresa){
-  if(senha===empresa.senha){
-    jwt.sign({email:empresa.email,id:empresa._id},jwtSecret, {}, (err,token)=>{
-      res.cookie('token',token).json(empresa)
-    })//gerando uma assinatura token com os dados email e id no payload
+app.put('/login/empresa', async (req, res) => {
+  const { email, senha } = req.body;
+  console.log('Requisição recebida com:', req.body);
+
+  // Procurando a empresa pelo email
+  const empresa = await EmpresaModel.findOne({ email });
+
+  if (empresa) {
+    // Verificando se a senha fornecida corresponde à senha armazenada no banco
+    if (senha === empresa.senha) {
+      // Gerando o token JWT
+      jwt.sign({ email: empresa.email, id: empresa._id }, jwtSecret, {}, (err, token) => {
+        if (err) {
+          return res.status(500).json({ message: 'Erro ao gerar token' });
+        }
+        // Enviando o token no cookie e os dados da empresa
+        res.cookie('token', token).json(empresa);
+      });
+    } else {
+      // Retornando um erro adequado caso a senha esteja errada
+      return res.status(400).json({ message: 'Senha incorreta' });
+    }
+  } else {
+    // Caso a empresa não seja encontrada
+    return res.status(404).json({ message: 'Empresa não encontrada' });
   }
-}else{
-    res.json('senha errada')
-    console.log('entrou aqui:',empresa)
-}});
+});
+
 
 
 app.put('/login/cozinha',async(req,res)=>{
   const {email,senha}=req.body;
   console.log('Requisição recebida com:', req.body);
-  const cozinha = await CozinhaModel.findOne({email,senha});
+//procurando email recebido no banco
+  const cozinha = await CozinhaModel.findOne({email});
+
   if (cozinha){
+    // Verificando se a senha fornecida corresponde à senha armazenada no banco
     if(senha===cozinha.senha){
+      //gerando token JWT
       jwt.sign({email:cozinha.email,id:cozinha._id},jwtSecret, {}, (err,token)=>{
+        if (err) {
+          return res.status(500).json({ message: 'Erro ao gerar token' });
+        }
         res.cookie('token',token).json(cozinha)
       })//gerando uma assinatura token com os dados email e id no payload
+    }else{
+      return res.status(400).json({message:'Senha incorreta'});
     }
-  }else{
-      res.json('senha errada')
-      console.log('entrou aqui  if cozinha:',cozinha)
-  }});
+  }else {
+        // Caso a empresa não seja encontrada
+        return res.status(404).json({ message: 'Empresa não encontrada' });
+      }
+  
+  });
 
   app.get('/profile', async (req, res) => {
     const { token } = req.cookies;
@@ -149,24 +174,6 @@ app.put('/logout',(req,res)=>{
   console.log("entrou no index logout")
   res.cookie('token','').json("saiu")
 })
-
-// Endpoint para obter todas as empresas cadastradas
-app.get('/getEmpresa', async (req, res) => {
-  try {
-    // Buscando todas as empresas no banco de dados
-    const empresas = await EmpresaModel.find();
-
-    if (empresas.length === 0) {
-      return res.status(404).json({ message: 'Nenhuma empresa encontrada.' });
-    }
-
-    // Retorna as empresas encontradas
-    return res.json(empresas);
-  } catch (error) {
-    console.error('Erro ao buscar empresas:', error);
-    res.status(500).json({ message: 'Erro interno do servidor' });
-  }
-});
 
 
 

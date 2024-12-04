@@ -21,6 +21,8 @@ public class CozinhaOperations {
     
     public CozinhaOperations() throws IOException{
 
+        
+
 
             // Conectando ao MongoDB Atlas
             MongoClient mongoClient = MongoClients.create("mongodb+srv://bruno:123456qwerty@gourmetoffice.fnzzv.mongodb.net/");

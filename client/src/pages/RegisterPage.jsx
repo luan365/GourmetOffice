@@ -20,7 +20,7 @@ export default function RegisterPage() {
 
   async function registerUser(ev) {
     ev.preventDefault();
-    
+
     // Validações
     if (!cozinha && !empresa) {
       alert("Por favor, selecione uma opção: Cozinha ou Empresa.");
@@ -100,7 +100,7 @@ export default function RegisterPage() {
           alert('Empresa cadastrada com sucesso!');
         }).catch(error => {
           console.error('Erro ao cadastrar empresa:', error.message);
-          alert('Erro ao cadastrar empresa:', error.response.data);
+          alert('Erro ao cadastrar empresa:'+ error.response.data);
         });
       }
 
