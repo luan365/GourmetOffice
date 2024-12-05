@@ -37,11 +37,11 @@ export default function RegisterPage() {
     if (type === "cozinha") {
       setCozinha(true);
       setEmpresa(false);
-      setTipo("cozinha");
+      
     } else {
       setCozinha(false);
       setEmpresa(true);
-      setTipo("empresa");
+      
     }
   };
 

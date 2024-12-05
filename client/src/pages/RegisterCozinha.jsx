@@ -12,10 +12,19 @@ export default function RegisterPage() {
   const [cnpj, setCnpj] = useState("");
   const [telefone, setTelefone] = useState("");
   const [descricao, setDescricao] = useState("");
+  const [numEstados, setNumEstados] = useState("");
+  const [estadosSelecionados, setEstadosSelecionados] = useState([]);
   const tipo = "cozinha";
   const notas = [];
 
   const navigate = useNavigate();
+
+  const estados = [
+    "AC", "AL", "AP", "AM", "BA", "CE", "ES", "GO", "MA", "MT", "MS", "MG", "PA", 
+    "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO", "DF"
+  ];
+
+  
 
   async function registerUser(ev) {
     ev.preventDefault();
@@ -94,7 +103,24 @@ export default function RegisterPage() {
     }
   }
 
+  const handleNumEstadosChange = (e) => {
+    const quantidade = parseInt(e.target.value);
+    setNumEstados(quantidade);
+    
+    // Cria uma lista de dropdowns de estados
+    const estadosSelecionadosArray = [];
+    for (let i = 0; i < quantidade; i++) {
+      estadosSelecionadosArray.push("");
+    }
+    setEstadosSelecionados(estadosSelecionadosArray);
+  };
 
+  // Função para atualizar o estado selecionado em um dos dropdowns
+  const handleEstadoChange = (index, value) => {
+    const updatedEstados = [...estadosSelecionados];
+    updatedEstados[index] = value;
+    setEstadosSelecionados(updatedEstados);
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-purple-100 to-purple-300">
@@ -164,10 +190,19 @@ export default function RegisterPage() {
               className="p-4 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 placeholder:text-gray-400 transition duration-200"
               required
             />
-          </div>
+            <input
+            type="number"
+            placeholder="Quantidade de estados com cobertura"
+            value={numEstados}
+            onChange={(ev) => setNumEstados(ev.target.value)}
+            className="mt-4 p-4 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 placeholder:text-gray-400 transition duration-200" 
+            min={1}
+            max={27}
+            required
+            
+          />
 
-
-          <input
+            <input
             type="text"
             placeholder="Descrição (Opcional)"
             value={descricao}
@@ -176,6 +211,28 @@ export default function RegisterPage() {
             required
             
           />
+          </div>
+
+
+          <div id="estadosContainer">
+            {Array.from({ length: numEstados }).map((_, index) => (
+              <select
+                key={index}
+                value={estadosSelecionados[index]}
+                onChange={(e) => handleEstadoChange(index, e.target.value)}
+                className="p-4 border border-gray-300 rounded-xl mt-4"
+                required
+              >
+                <option value="">Selecione um estado</option>
+                {estados.map((estado) => (
+                  <option key={estado} value={estado}>
+                    {estado}
+                  </option>
+                ))}
+              </select>
+            ))}
+          </div>
+
 
           <button
             type="submit"
@@ -191,6 +248,11 @@ export default function RegisterPage() {
             </Link>
           </div>
         </form>
+
+        <script>
+
+        </script>
+
       </div>
     </div>
   );
