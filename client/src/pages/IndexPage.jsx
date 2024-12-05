@@ -18,6 +18,8 @@ export default function IndexPage() {
     }
   }
 
+
+
   // UseEffect para buscar as cozinhas quando o componente for montado
   useEffect(() => {
     getEmpresa();
@@ -39,7 +41,9 @@ export default function IndexPage() {
                   </div>
                 </div>
                 <h3 className="text-3xl font-semibold text-purple-600 text-center">{cozinha.nome}</h3>
-                <p className="text-xl text-gray-600 text-center mb-4">{cozinha.tipo}</p>
+                <p className="text-xl text-gray-600 text-center mb-4">{
+                cozinha.notas && cozinha.notas.length > 0 ? `Avaliação: ${(cozinha.notas.reduce((acc, nota) => acc + nota, 0) /cozinha.notas.length).toFixed(2)}`
+                : "Sem Avaliações"}</p>
 
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
