@@ -3,7 +3,7 @@ import './App.css'
 import {Route,Routes} from "react-router-dom";
 import IndexPage from './pages/IndexPage.jsx';
 import LoginPage from './pages/LoginPage.jsx';
-
+import DetalhesCozinha from './pages/DetalhesCozinha.jsx';
 import RegisterCozinha from './pages/RegisterCozinha';
 import RegisterEmpresa from './pages/RegisterEmpresa';
 import RegisterPageChoose from './pages/RegisterPageChoose';
@@ -25,7 +25,7 @@ function App() {
         <Route path="/" element={<Layout/>}>
           <Route index element={<IndexPage/>}/>
           <Route path="/login" element={<LoginPage />}/>
-          
+          <Route path="/detalhesCozinha/:cnpj" element={<DetalhesCozinha />}/>
           <Route path='/registerCozinha'element={<RegisterCozinha/>}/>
           <Route path='/registerEmpresa'element={<RegisterEmpresa/>}/>
           <Route path='/registerFirst'element={<RegisterPageChoose/>}/>

@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { FaMapMarkerAlt, FaPhoneAlt, FaEnvelope, FaClipboardList } from 'react-icons/fa'; // Para ícones
+import { useNavigate } from "react-router-dom";
 
 export default function IndexPage() {
   // Estado para armazenar as cozinhas
   const [cozinhas, setCozinhas] = useState([]);
+  const navigate = useNavigate();
 
   // Função para buscar as cozinhas
   async function getEmpresa() {
@@ -69,8 +71,10 @@ export default function IndexPage() {
                 </div>
 
                 <div className="flex justify-center mt-6">
-                  <button className="bg-gradient-to-r from-purple-500 to-purple-700 text-white py-3 px-8 rounded-full text-lg hover:bg-purple-600 transform transition-all duration-200">
-                    Saiba Mais
+                  <button 
+                  onClick={()=>navigate(`/detalhesCozinha/${cozinha.cnpj}`)}
+                  className="bg-gradient-to-r from-purple-500 to-purple-700 text-white py-3 px-8 rounded-full text-lg hover:bg-purple-600 transform transition-all duration-200">
+                  Saiba Mais
                   </button>
                 </div>
               </div>
