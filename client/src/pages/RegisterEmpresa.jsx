@@ -11,10 +11,7 @@ export default function RegisterPage() {
   const [endereco, setEndereco] = useState("");
   const [cnpj, setCnpj] = useState("");
   const [telefone, setTelefone] = useState("");
-  const [cozinha, setCozinha] = useState(false);
-  const [empresa, setEmpresa] = useState(false);
-  const [descricao, setDescricao] = useState("");
-  const [tipo, setTipo] = useState("");
+  const tipo = "empresa";
   const notas = [];
 
   const navigate = useNavigate();
@@ -23,11 +20,7 @@ export default function RegisterPage() {
     ev.preventDefault();
 
     // Validações
-    if (!cozinha && !empresa) {
-      alert("Por favor, selecione uma opção: Cozinha ou Empresa.");
-      return;
-    }
-
+ 
     if (senha !== senhaConfirma) {
       alert("Senhas não correspondem");
       return;
@@ -67,28 +60,7 @@ export default function RegisterPage() {
     try {
       let success = false;
 
-      if (cozinha) {
-        await axios.put('http://localhost:8080/insertCozinha', {
-          nome,
-          senha,
-          email,
-          endereco,
-          cnpj,
-          telefone,
-          descricao,
-          tipo,
-          notas
-        }).then(response => {
-          success = true;
-          alert('Sua cozinha foi cadastrada com sucesso!');
-        }).catch(error => {
-          console.error('Erro ao cadastrar cozinha:', error.message);
-          alert('Erro ao cadastrar Cozinha:'+ error.response.data);
-          
-        });
-      }
-
-      if (empresa) {
+    
         await axios.put('http://localhost:8080/insertEmpresa', {
           nome,
           senha,
@@ -104,7 +76,7 @@ export default function RegisterPage() {
           console.error('Erro ao cadastrar empresa:', error.message);
           alert('Erro ao cadastrar empresa:'+ error.response.data);
         });
-      }
+      
 
       if (success) {
         setTimeout(() => {
@@ -116,17 +88,7 @@ export default function RegisterPage() {
     }
   }
 
-  const handleCheckboxChange = (type) => {
-    if (type === "cozinha") {
-      setCozinha(true);
-      setEmpresa(false);
-      setTipo("cozinha");
-    } else {
-      setCozinha(false);
-      setEmpresa(true);
-      setTipo("empresa");
-    }
-  };
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-purple-100 to-purple-300">
@@ -198,39 +160,7 @@ export default function RegisterPage() {
             />
           </div>
 
-          <div className="flex items-center justify-between mt-4">
-            <div className="flex items-center space-x-4">
-              <label className="flex items-center text-sm text-gray-600">
-                <input
-                  type="checkbox"
-                  checked={cozinha}
-                  onChange={() => handleCheckboxChange("cozinha")}
-                  className="form-checkbox text-purple-600"
-                />
-                <span className="ml-2">Cozinha</span>
-              </label>
-              <label className="flex items-center text-sm text-gray-600">
-                <input
-                  type="checkbox"
-                  checked={empresa}
-                  onChange={() => handleCheckboxChange("empresa")}
-                  className="form-checkbox text-purple-600"
-                />
-                <span className="ml-2">Empresa</span>
-              </label>
-            </div>
-          </div>
 
-          <input
-            type="text"
-            placeholder="Descrição (para Cozinha)"
-            value={descricao}
-            onChange={(ev) => setDescricao(ev.target.value)}
-            disabled={!cozinha}
-            className={`mt-4 p-4 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 placeholder:text-gray-400 transition duration-200 ${
-              cozinha ? "bg-white text-black" : "bg-gray-200 text-gray-400"
-            }`}
-          />
 
           <button
             type="submit"

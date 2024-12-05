@@ -43,6 +43,7 @@ public class CozinhaOperations {
             
                 
 
+            @SuppressWarnings("unchecked")
             Cozinha cozinha = new Cozinha(doc.getString("nome"),
             doc.getString("cnpj"),
             doc.getString("email"),
