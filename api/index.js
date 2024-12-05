@@ -43,6 +43,8 @@ function loadDbProperties(filePath) {
 // Caminho para o arquivo db.properties
 const filePath = 'C:/Users/55199/GourmetOffice/serverjava/target/classes/db.properties'
 
+//caminho pc brunosh : 'C:/users/bruno/Desktop/GourmetOffice/serverjava/src/main/resources/db.properties'
+
 // Carregar as credenciais do arquivo
 const credentials = loadDbProperties(filePath);
 

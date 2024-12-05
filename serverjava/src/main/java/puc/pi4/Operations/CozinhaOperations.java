@@ -36,7 +36,11 @@ public class CozinhaOperations {
         System.out.println("Funcao buscar iniciada");
         List<Cozinha> cozinhas = new ArrayList<>();
 
+        
+
         for (Document doc : collection.find()) {
+
+            
                 
 
             Cozinha cozinha = new Cozinha(doc.getString("nome"),
@@ -46,7 +50,9 @@ public class CozinhaOperations {
             doc.getString("telefone"),
             doc.getString("endereco"),
             doc.getString("descricao"),
-            doc.getString("tipo"));
+            doc.getString("tipo"),
+            (List<Double>)doc.get("notas")
+            );
 
             cozinhas.add(cozinha);
 
@@ -55,16 +61,27 @@ public class CozinhaOperations {
         return cozinhas;
     }
 
+    public void addNotaCozinha(String cnpj, Double nota) throws Exception{
+        Cozinha x = getCozinhaByCNPJ(cnpj);
+
+        x.addNota(nota);
+
+        updateCozinha(x, cnpj);
+
+
+    }
+
     public Cozinha getCozinhaByCNPJ(String cnpj){
         Gson gson = new Gson();
 
         Document filter = new Document("cnpj", cnpj);
 
         Document doc = collection.find(filter).first();
-
+        
         if(doc == null){
             return null;
         }else{
+            
             return gson.fromJson(doc.toJson(), Cozinha.class);
         }
             
@@ -116,7 +133,8 @@ public class CozinhaOperations {
 
     }
 
-        public Cozinha updateCozinha(Cozinha x, String cnpj){
+
+        public Cozinha updateCozinha(Cozinha x, String cnpj) throws Exception{
         Gson gson = new Gson();
         String json = gson.toJson(x);
 
@@ -131,7 +149,8 @@ public class CozinhaOperations {
         try {
             collection.findOneAndUpdate(filter, updateDoc, new FindOneAndUpdateOptions());
         } catch (Exception e) {
-            System.err.println("Erro ao atualizar" + e);
+            throw new Exception("Erro ao atualizar cozinha " + e);
+            
         }
         
 

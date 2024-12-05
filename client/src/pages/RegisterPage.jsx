@@ -15,6 +15,7 @@ export default function RegisterPage() {
   const [empresa, setEmpresa] = useState(false);
   const [descricao, setDescricao] = useState("");
   const [tipo, setTipo] = useState("");
+  const notas = [];
 
   const navigate = useNavigate();
 
@@ -75,7 +76,8 @@ export default function RegisterPage() {
           cnpj,
           telefone,
           descricao,
-          tipo
+          tipo,
+          notas
         }).then(response => {
           success = true;
           alert('Sua cozinha foi cadastrada com sucesso!');
