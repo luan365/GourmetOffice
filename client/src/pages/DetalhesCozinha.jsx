@@ -65,6 +65,10 @@ return (
             <span className="font-semibold text-gray-600">Descrição:</span>
             <span>{cozinha.descricao}</span>
           </div>
+          <div className="flex justify-between" >
+            <span className="font-semibold text-gray-600">Estados atuantes:</span>
+            <span>{cozinha.estados.join(", ")}</span>
+          </div>
         </div>
       </div>
     </div>

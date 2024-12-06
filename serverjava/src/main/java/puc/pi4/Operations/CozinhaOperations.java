@@ -52,7 +52,8 @@ public class CozinhaOperations {
             doc.getString("endereco"),
             doc.getString("descricao"),
             doc.getString("tipo"),
-            (List<Double>)doc.get("notas")
+            (List<Double>)doc.get("notas"),
+            (List<String>)doc.get("estados")
             );
 
             cozinhas.add(cozinha);

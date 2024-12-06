@@ -13,11 +13,12 @@ public class Cozinha {
     private String descricao;
     private String tipo;
     private List<Double> notas;
+    private List<String> estados;
     
 
    
     
-    public Cozinha(String nome,String cnpj,String email,String senha,String telefone, String endereco,String descricao, String tipo, List<Double> notas) throws Exception{
+    public Cozinha(String nome,String cnpj,String email,String senha,String telefone, String endereco,String descricao, String tipo, List<Double> notas, List<String> estados) throws Exception{
 
         if(nome.length()<=0 || nome ==null)throw new Exception("Nome invalido");
         if(cnpj.length()!= 14 || !cnpj.matches("[0-9]+") || cnpj ==null) throw new Exception("CNPJ invalido");
@@ -36,7 +37,7 @@ public class Cozinha {
         this.descricao = descricao;
         this.tipo = tipo;
         this.notas = notas != null ? notas : new ArrayList<>();
-        
+        this.estados = estados != null ? estados : new ArrayList<>();
 
         
     }
