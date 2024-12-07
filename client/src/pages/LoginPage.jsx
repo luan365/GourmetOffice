@@ -108,7 +108,7 @@ export default function LoginPage() {
 
           <div className="text-center text-gray-500 py-4">
             Ainda não tem uma conta? 
-            <Link to="/register" className="text-purple-600 font-semibold hover:underline">
+            <Link to="/registerFirst" className="text-purple-600 font-semibold hover:underline">
               Registre-se agora
             </Link>
           </div>

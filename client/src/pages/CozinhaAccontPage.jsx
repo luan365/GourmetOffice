@@ -6,13 +6,35 @@ import axios from "axios";
 export default function EmpresaAccontPage(){
 const {ready,user,setUser} = useContext(UserContext);
 const {redirect,setRedirect} = useState(null);
+const [cnpj, setCnpj] = useState(""); 
+
 
 async function logout(){
     await axios.put('http://localhost:4000/logout');
+    alert("saindo...")
     setUser(null);
     setRedirect('/')
     console.log('redirect :', redirect)
 }
+async function deletar() {
+  
+      // Passando o CNPJ no corpo da requisição como um objeto JSON
+      const response = await axios.delete('http://localhost:8080/deleteCozinha', {
+        data: {
+          cnpj: user.cnpj // Passando o CNPJ no corpo da requisição
+        }
+      });
+      if (response.status === 200) {
+        alert("Conta excluída com sucesso");
+        setUser(null);
+        setRedirect('/');
+      } else {
+        alert("Erro ao excluir conta. Tente novamente.");
+      }
+     
+  
+}
+
 
 if(!ready){
     console.log(ready,'ready aqui')
@@ -56,13 +78,13 @@ return (
             <span className="font-semibold text-gray-600">Telefone:</span>
             <span>{user.telefone}</span>
           </div>
-          <div className="flex justify-between">
+          <div className="flex justify-between" >
             <span className="font-semibold text-gray-600">Endereço:</span>
             <span>{user.endereco}</span>
           </div>
           <div>
             <button onClick={logout} className="text-white">Sair</button>
-            <button onClick={logout} className="text-white bg-red-500 mt-3">Excluir conta</button>
+            <button onClick={deletar} className="text-white bg-red-500 mt-3">Excluir conta</button>
           </div>
         </div>
       </div>

@@ -1,5 +1,8 @@
 package puc.pi4.Entities;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Cozinha {
     private String nome;
     private String cnpj;
@@ -9,10 +12,13 @@ public class Cozinha {
     private String endereco;
     private String descricao;
     private String tipo;
+    private List<Double> notas;
+    private List<String> estados;
+    
 
    
     
-    public Cozinha(String nome,String cnpj,String email,String senha,String telefone, String endereco,String descricao, String tipo) throws Exception{
+    public Cozinha(String nome,String cnpj,String email,String senha,String telefone, String endereco,String descricao, String tipo, List<Double> notas, List<String> estados) throws Exception{
 
         if(nome.length()<=0 || nome ==null)throw new Exception("Nome invalido");
         if(cnpj.length()!= 14 || !cnpj.matches("[0-9]+") || cnpj ==null) throw new Exception("CNPJ invalido");
@@ -30,12 +36,23 @@ public class Cozinha {
         this.endereco = endereco;
         this.descricao = descricao;
         this.tipo = tipo;
+        this.notas = notas != null ? notas : new ArrayList<>();
+        this.estados = estados != null ? estados : new ArrayList<>();
 
         
     }
 
     public String getCNPJ(){
         return this.cnpj;
+    }
+    public String getEmail(){
+        return this.email;
+    }
+    public List<Double> getNotas(){
+        return this.notas;
+    }
+    public void addNota(Double nota){
+        this.notas.add(nota);
     }
 
     public String[] validate(){
@@ -63,4 +80,5 @@ public class Cozinha {
         ret += ("Tipo: "+this.tipo + "\n}");
         return ret;
     }
+
 }

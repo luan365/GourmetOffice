@@ -13,6 +13,20 @@ async function logout(){
     setRedirect('/')
     console.log('redirect :', redirect)
 }
+async function deletar() {
+    const response = await axios.delete('http://localhost:8080/deleteEmpresa', {
+      data: {
+        cnpj: user.cnpj // Passando o CNPJ no corpo da requisição
+      }
+    });
+    if (response.status === 200) {
+      alert("Conta excluída com sucesso");
+      setUser(null);
+      setRedirect('/');
+    } else {
+      alert("Erro ao excluir conta. Tente novamente.");
+    }
+}
 
 if(!ready){
     console.log(ready,'ready aqui')
@@ -65,6 +79,7 @@ return (
         </div>
         <div >
       <button onClick={logout} className="text-white">Sair</button>
+      <button onClick={deletar} className="text-white bg-red-500 mt-3">Excluir conta</button>
           </div>
       </div>
     </div>

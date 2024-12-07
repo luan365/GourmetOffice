@@ -70,6 +70,8 @@ public class Controller {
         
         if ("GET".equals(method)) {
             
+        
+
             handled = true;
             if ("/getAllEmpresas".equals(path)) {
                 try {
@@ -132,7 +134,7 @@ public class Controller {
                     validate = empresa.validate();
 
                     //Funcao que valida as informacoes do objeto da classe empresa, porque o gson, que transforma JSON em objetos JAVA, acaba nao usando o construtor da classe EMPRESA.
-                    if(validate[1] == "false"){
+                    if("false".equals(validate[1])){
                         throw new Exception(validate[0]);
                     }
 
@@ -172,7 +174,7 @@ public class Controller {
                     if(validate[1] == "false"){
                         throw new Exception(validate[0]);
                     }
-                        cozinhaOperations.insertCozinha(cozinha);
+                    cozinhaOperations.insertCozinha(cozinha);
                     
 
                     writer.println("HTTP/1.1 200 Created");
@@ -386,9 +388,110 @@ public class Controller {
                     writer.println("");
                     writer.println(gson.toJson("Erro ao atualizar cozinha: " + validate[0]));
                 }
-            } else {
+            } else if("/addNotaCozinha".equals(path))
+            {
+                try {
+                    int contentLength = getContentLength();
+                    if (contentLength == 0) {
+                        throw new IllegalArgumentException("Content-Length não especificado ou é zero.");
+                    }
+                    String requestBody = readRequestBody(contentLength);
+                    JsonObject jsonObject = JsonParser.parseString(requestBody).getAsJsonObject();
+                    if (!jsonObject.has("cnpj")) {
+                        throw new IllegalArgumentException("CNPJ não encontrado no corpo da requisição.");
+                    }
+
+                    String cnpj = jsonObject.get("cnpj").getAsString();
+                    Double nota = jsonObject.get("nota").getAsDouble();
+
+                    if (cnpj == null || cnpj.isEmpty() || cnpj.length()!=14) {
+                        throw new IllegalArgumentException("CNPJ nao pode ser nulo ou vazio e deve ter 14 digitos.");
+                    }
+
+                    if (!cnpj.matches("[0-9]+"))
+                    {
+                        throw new IllegalArgumentException("CNPJ nao deve ter caracteres nao numericos");
+                    }
+
+                    cozinhaOperations.addNotaCozinha(cnpj,nota);
+
+                    
+                        writer.println("HTTP/1.1 200 Deleted");
+                        addCorsHeaders();
+                        writer.println("Content-Type: application/json");
+                        writer.println("");
+                        writer.println("Nota Adicionada: "+ nota);
+                  
+                    
+                } catch (Exception e) {
+                    System.err.println("Erro ao deletar cozinha: " + e);
+                    e.printStackTrace();
+                    writer.println("HTTP/1.1 400 Bad Request");
+                    addCorsHeaders();
+                    writer.println("Content-Type: application/json");
+                    writer.println("");
+                    writer.println(gson.toJson("Erro ao deletar cozinha: " + e));
+                }
+            }else {
                 unknownPath();
             }
+        }
+        if("POST".equals(method)){
+            handled = true;
+            if("/getCozinhaByCNPJ".equals(path)){
+                try {
+
+                    int contentLength = getContentLength();
+                    if (contentLength == 0) {
+                        throw new IllegalArgumentException("Content-Length não especificado ou é zero.");
+                    }
+                    String requestBody = readRequestBody(contentLength);
+                    JsonObject jsonObject = JsonParser.parseString(requestBody).getAsJsonObject();
+                    if (!jsonObject.has("cnpj")) {
+                        throw new IllegalArgumentException("CNPJ não encontrado no corpo da requisição.");
+                    }
+
+                    String cnpj = jsonObject.get("cnpj").getAsString();
+
+                    if (cnpj == null || cnpj.isEmpty() || cnpj.length()!=14) {
+                        throw new IllegalArgumentException("CNPJ nao pode ser nulo ou vazio e deve ter 14 digitos.");
+                    }
+
+                    if (!cnpj.matches("[0-9]+"))
+                    {
+                        throw new IllegalArgumentException("CNPJ nao deve ter caracteres nao numericos");
+                    }
+
+                    Cozinha cozinhaBuscada = cozinhaOperations.getCozinhaByCNPJ(cnpj);
+
+                    if(cozinhaBuscada != null){
+                        writer.println("HTTP/1.1 200 OK");
+                        addCorsHeaders();
+                        writer.println("Content-Type: application/json");
+                        writer.println("");
+                        writer.println(gson.toJson(cozinhaBuscada));
+                    }else{
+                        writer.println("HTTP/1.1 200 Search Failed");
+                        addCorsHeaders();
+                        writer.println("Content-Type: application/json");
+                        writer.println("");
+                        writer.println("Nenhuma Cozinha* encontrada com CNPJ "+cnpj);
+                    }
+
+
+
+
+                } catch (Exception e) {
+                    System.err.println("Erro ao buscar cozinha: " + e);
+                    e.printStackTrace();
+                    writer.println("HTTP/1.1 400 Bad Request");
+                    addCorsHeaders();
+                    writer.println("Content-Type: application/json");
+                    writer.println("");
+                    writer.println(gson.toJson("Erro ao buscar cozinha: " +e));
+                }
+            }
+
         }
 
         
@@ -442,6 +545,12 @@ public class Controller {
         writer.println("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
         writer.println("Access-Control-Allow-Headers: Content-Type");
         writer.println("Access-Control-Allow-Credentials: true"); // Para permitir cookies, se necessário
+    }
+
+    private String getCnpjFromUrl(String path) {
+        // Supondo que o caminho seja "/getCozinhaByCNPJ/{cnpj}"
+        String[] pathParts = path.split("/");
+        return pathParts.length > 2 ? pathParts[2] : null;
     }
     
 
