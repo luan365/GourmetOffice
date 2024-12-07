@@ -41,7 +41,8 @@ function loadDbProperties(filePath) {
 }
 
 // Caminho para o arquivo db.properties
-const filePath = 'C:/users/bruno/Desktop/GourmetOffice/serverjava/src/main/resources/db.properties'
+const filePath = '../serverjava/src/main/resources/db.properties';
+
 
 //caminho pc brunosh : 'C:/users/bruno/Desktop/GourmetOffice/serverjava/src/main/resources/db.properties'
 
@@ -53,7 +54,7 @@ const user = credentials.db_user;
 const pass = credentials.db_password;
 
 // Construir a URI de conexão com MongoDB
-const uri = 'mongodb+srv://vitorhugo:123456qwerty@gourmetoffice.fnzzv.mongodb.net/GourmetOffice?retryWrites=true&w=majority&appName=gourmetOffice';
+const uri = `mongodb+srv://${user}:${pass}@gourmetoffice.fnzzv.mongodb.net/GourmetOffice?retryWrites=true&w=majority&appName=gourmetOffice`;
 
 
 mongoose.connect(uri);
