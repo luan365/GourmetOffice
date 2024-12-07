@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 
 
-export default function EmpresaAccontPage(){
+export default function detalhesCozinha(){
   const { cnpj } = useParams();
   const [cozinha, setCozinha] = useState([]);
   async function getCozinhaByCNPJ() {
@@ -67,7 +67,7 @@ return (
           </div>
           <div className="flex justify-between" >
             <span className="font-semibold text-gray-600">Estados atuantes:</span>
-            <span>{cozinha.estados.join(", ")}</span>
+            <span>{Array.isArray(cozinha.estados) ? cozinha.estados.join(", ") : "Nenhum estado disponível"}</span>
           </div>
         </div>
       </div>

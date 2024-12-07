@@ -18,18 +18,7 @@ export default function Header(){
             </span>
           </Link>
             <div > 
-            <div className="flex gap-2 border border-gray-500 rounded-full py-2 px-4 shadow-md shadow-black-300">
-            <div className="px-4">Estado</div>
-            <div className="border border-purple-150"></div>
-            <div className="px-4">Cidade</div>
-            <div className="border border-purple-150"></div>
-            <div className="px-4">Data</div>
-          <button className='bg-purple-700 text-white p-1  rounded-full'>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-              <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-            </svg>
-          </button>
-          </div>
+
             </div>
      
           <Link to={user?(user.tipo == 'empresa' ? '/Accont/Empresa' : '/Accont/Cozinha'):'/login'} className='flex items-center border border-gray-500 rounded-full px-3 py-1 gap-2 shadow-md shadow-black-300'>
