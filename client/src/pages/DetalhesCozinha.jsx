@@ -1,6 +1,6 @@
 
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 
 
@@ -8,7 +8,8 @@ export default function detalhesCozinha(){
   const { cnpj } = useParams();
   const [cozinha, setCozinha] = useState([]);
   const [showInput, setShowInput] = useState(false);
-  const [nota, setNota] = useState("");
+  const [nota, setNota] = useState();
+  const navigate = useNavigate();
   async function getCozinhaByCNPJ() {
     try {
       // Chama a API para obter as cozinhas
@@ -20,7 +21,33 @@ export default function detalhesCozinha(){
     }
   }
    
+  async function adicionarNota(){
+    if(isNaN(nota)){
+      alert("nota deve ser apenas numeros")
+      return
+    }
 
+    if(nota.length == 0){
+      alert("Nota vazia");
+      return
+    }
+    if(nota<0 || nota>5 ){
+      alert("Nota fora do intervalo");
+      return;
+    }
+
+    
+
+    try {
+      await axios.patch(`http://localhost:8080/addNotaCozinha`,{cnpj:cnpj, nota:nota});
+      alert("Nota Adicionada, Redirecionando")
+      navigate(`/`)
+    } catch (error) {
+      alert(error)
+    }
+    
+
+  }
 
 
 
@@ -80,12 +107,12 @@ return (
 
             <input
             type="text"
-            placeholder="Nota"
+            placeholder="Nota (1-5)"
             className="px-2 py-1 text-sm outline-black border-gray-300 bg-transparent"
             value={nota}
             onChange={(ev) => setNota(ev.target.value)}
           />
-          <button className="bg-gradient-to-r from-purple-500 to-purple-700 text-white py-3 px-8 rounded-full text-lg hover:bg-purple-600 transform transition-all duration-200">
+          <button className="bg-gradient-to-r from-purple-500 to-purple-700 text-white py-3 px-8 rounded-full text-lg hover:bg-purple-600 transform transition-all duration-200" onClick={adicionarNota}>
             Inserir nota
           </button>
 

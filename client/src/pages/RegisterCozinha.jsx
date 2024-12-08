@@ -90,6 +90,16 @@ export default function RegisterPage() {
       return;
     }
 
+    if(isNaN(cnpj)){
+      alert("cnpj deve ser apenas numeros")
+      return
+    }
+
+    if(isNaN(telefone)){
+      alert("telefone deve ser apenas numeros")
+      return
+    }
+
     try {
       let success = false;
       await axios.put('http://localhost:8080/insertCozinha', {

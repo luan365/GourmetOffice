@@ -56,6 +56,15 @@ export default function RegisterPage() {
       return;
     }
 
+    if(isNaN(cnpj)){
+      alert("cnpj deve ser apenas numeros")
+      return
+    }
+    if(isNaN(telefone)){
+      alert("telefone deve ser apenas numeros")
+      return
+    }
+
     ev.preventDefault();
     try {
       let success = false;
@@ -116,7 +125,7 @@ export default function RegisterPage() {
             />
             <input
               type="password"
-              placeholder="Senha"
+              placeholder="Senha (Minimo 8 digitos)"
               value={senha}
               onChange={(ev) => setSenha(ev.target.value)}
               className="p-4 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 placeholder:text-gray-400 transition duration-200"

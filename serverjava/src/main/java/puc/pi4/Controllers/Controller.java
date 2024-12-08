@@ -61,7 +61,7 @@ public class Controller {
             
             writer.println("HTTP/1.1 200 OK");
             writer.println("Access-Control-Allow-Origin: http://localhost:5173");
-            writer.println("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+            writer.println("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, PATCH, OPTIONS");
             writer.println("Access-Control-Allow-Headers: Content-Type");
             writer.println("Access-Control-Allow-Credentials: true");
             writer.println(""); 
