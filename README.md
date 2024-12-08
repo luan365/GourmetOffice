@@ -28,6 +28,8 @@ Repositório do **Grupo 8** do projeto integrador 4.
 
 - *Instalar o yarn*
 
+- *Instalar NodeJs*
+
 - *instalar maven* (opcional)
 
 ### Iniciando o front-end
@@ -39,6 +41,8 @@ Repositório do **Grupo 8** do projeto integrador 4.
 - *Digitar "yarn dev" no temrinal e clickar no link localhost*
 
 ### Iniciando servidor com node.js
+
+- *Em um terminal digitar "npm install -g nodemon*
 - *na pasta api*
 - *importar express =  yarn add express*
 - *importar cors = yarn add cors*
