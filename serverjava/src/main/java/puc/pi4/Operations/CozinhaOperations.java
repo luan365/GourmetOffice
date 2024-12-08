@@ -7,8 +7,7 @@ import java.util.List;
 import org.bson.Document;
 
 import com.google.gson.Gson;
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
+
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.FindOneAndUpdateOptions;
@@ -19,14 +18,12 @@ import puc.pi4.Entities.Cozinha;
 public class CozinhaOperations {
     private MongoCollection<Document> collection;
     
-    public CozinhaOperations() throws IOException{
+    public CozinhaOperations(MongoDatabase database) throws IOException{
 
         
 
 
             // Conectando ao MongoDB Atlas
-            MongoClient mongoClient = MongoClients.create("mongodb+srv://bruno:123456qwerty@gourmetoffice.fnzzv.mongodb.net/");
-            MongoDatabase database = mongoClient.getDatabase("GourmetOffice");
             this.collection = database.getCollection("Cozinhas");
 
      

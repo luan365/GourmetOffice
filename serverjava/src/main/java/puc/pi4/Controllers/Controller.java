@@ -10,6 +10,7 @@ import java.util.List;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.mongodb.client.MongoDatabase;
 
 import puc.pi4.Entities.Cozinha;
 import puc.pi4.Entities.Empresa;
@@ -18,8 +19,9 @@ import puc.pi4.Operations.EmpresaOperations;
 
 public class Controller {
     //Instanciando classes para operações com as entidades
-    private final EmpresaOperations empresaOperations = new EmpresaOperations();
-    private final CozinhaOperations cozinhaOperations = new CozinhaOperations();
+    private MongoDatabase database;
+    private EmpresaOperations empresaOperations;
+    private CozinhaOperations cozinhaOperations;
     private final Gson gson = new Gson();
 
     //Iniciando socket e bufferedReader
@@ -28,10 +30,13 @@ public class Controller {
     private final PrintWriter writer;
 
     // "construtor" do controller, inicia o socket e os readers.
-    public Controller(Socket clientSocket) throws IOException {
+    public Controller(Socket clientSocket, MongoDatabase database) throws IOException {
         this.clientSocket = clientSocket;
         this.reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         this.writer = new PrintWriter(clientSocket.getOutputStream(), true);
+        this.database = database;
+        empresaOperations = new EmpresaOperations(database);
+        cozinhaOperations = new CozinhaOperations(database);
     }
 
     //Metodo chamado em "serverjava.java", basicamente e o que escuta requisicoes a qualquer momento

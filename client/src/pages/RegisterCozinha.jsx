@@ -15,7 +15,7 @@ export default function RegisterPage() {
   const [numEstados, setNumEstados] = useState(""); // Estado para o número de estados
   const tipo = "cozinha";
   const notas = [];
-  const [estados, setEstados] = useState([]); // Renomeado de estadosSelecionados para estados
+  const [estados, setEstados] = useState([]); // estados selecionados para registro
 
   const navigate = useNavigate();
 
@@ -40,6 +40,18 @@ export default function RegisterPage() {
       if (estados[i] === "") {
         alert("Preencha todos os estados");
         return;  // Interrompe a execução da função ao encontrar um erro
+      }
+    }
+    for (let i = 0; i < estados.length; i++) {
+      for (let j = 0; j < estados.length; j++) {
+        if(i!=j){
+          if (estados[i] == estados[j]) {
+            alert("Estados repetidos, insira outro diferente ou remova.");
+            return;  // Interrompe a execução da função ao encontrar um erro
+          }
+
+        }
+
       }
     }
 
