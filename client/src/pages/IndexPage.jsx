@@ -27,6 +27,18 @@ export default function IndexPage() {
     }
   }
 
+  function concatTelefone(cozinha){
+    let ret = ""
+    for(let i=0;i<cozinha.telefone.length;i++){
+      if(i>1){
+        ret += cozinha.telefone[i]
+      }
+    }
+    
+
+    return "+55" + " " + cozinha.telefone[0] + cozinha.telefone[1] + " " +ret 
+  }
+
   function limpar(){
 
   }
@@ -169,7 +181,7 @@ export default function IndexPage() {
                 </div>
                 <h3 className="text-3xl font-semibold text-purple-600 text-center">{cozinha.nome}</h3>
                 <p className="text-xl text-gray-600 text-center mb-4">{
-                cozinha.notas && cozinha.notas.length > 0 ? `Avaliação: ${(cozinha.notas.reduce((acc, nota) => acc + nota, 0) /cozinha.notas.length).toFixed(2)}`
+                cozinha.notas && cozinha.notas.length > 0 ? `Avaliações(${cozinha.notas.length}): ${(cozinha.notas.reduce((acc, nota) => acc + nota, 0) /cozinha.notas.length).toFixed(2)}`
                 : "Sem Avaliações"}</p>
 
                 <div className="space-y-4">
@@ -179,7 +191,7 @@ export default function IndexPage() {
                   </div>
                   <div className="flex items-center justify-between">
                     <FaPhoneAlt className="text-purple-500" />
-                    <span className="text-gray-700">{cozinha.telefone}</span>
+                    <span className="text-gray-700"> {concatTelefone(cozinha)}</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <FaEnvelope className="text-purple-500" />

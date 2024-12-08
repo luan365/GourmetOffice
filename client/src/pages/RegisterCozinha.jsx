@@ -204,6 +204,7 @@ export default function RegisterPage() {
                 className="p-4 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 placeholder:text-gray-400 transition duration-200"
                 required
               />
+              
               <input
                 type="text"
                 placeholder="CNPJ"

@@ -445,7 +445,6 @@ public class Controller {
             handled = true;
             if("/getCozinhaByCNPJ".equals(path)){
                 try {
-
                     int contentLength = getContentLength();
                     if (contentLength == 0) {
                         throw new IllegalArgumentException("Content-Length não especificado ou é zero.");
