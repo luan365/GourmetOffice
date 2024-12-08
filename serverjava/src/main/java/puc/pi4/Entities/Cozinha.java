@@ -17,7 +17,8 @@ public class Cozinha {
     
 
    
-    
+    //Construtor feito apenas por desencargo, os constructors sao usados para construir o objeto a partir das informações recebidas do mongo nas funcoes de busca, ou seja
+    //se entrou no mongo, é valido, logo não precisava de validação.
     public Cozinha(String nome,String cnpj,String email,String senha,String telefone, String endereco,String descricao, String tipo, List<Double> notas, List<String> estados) throws Exception{
 
         if(nome.length()<=0 || nome ==null)throw new Exception("Nome invalido");

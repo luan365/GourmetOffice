@@ -14,10 +14,8 @@ import puc.pi4.Entities.Empresa;
 
 public class EmpresaOperations {
     private  MongoCollection<Document> collection;
-    
+        //Recebe a database mongo que veio do Serverjava->Controller onde essa classe foi instanciada.
         public EmpresaOperations(MongoDatabase database){
-
-                   // Conectando ao MongoDB Atlas
             this.collection = database.getCollection("Empresas");
         } 
         

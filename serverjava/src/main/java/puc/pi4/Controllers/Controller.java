@@ -39,7 +39,7 @@ public class Controller {
         cozinhaOperations = new CozinhaOperations(database);
     }
 
-    //Metodo chamado em "serverjava.java", basicamente e o que escuta requisicoes a qualquer momento
+    //Metodo chamado em "serverjava.java", basicamente é o que executa as requisicoes
     public void handleRequest() throws IOException {
         
 
@@ -87,7 +87,7 @@ public class Controller {
                     addCorsHeaders();
                     writer.println("Content-Type: application/json");
                     writer.println(""); // vazio para sinalizar final do header
-                    writer.println(gson.toJson(empresas)); //body
+                    writer.println(gson.toJson(empresas)); //corpo da resposta
                 } catch (Exception e) {
                     System.err.println("Erro ao listar empresas: " + e);
                     e.printStackTrace();
@@ -208,16 +208,20 @@ public class Controller {
             
             if ("/deleteEmpresa".equals(path)) {
                 try {
+                    //Corpo da requisição
                     int contentLength = getContentLength();
                     if (contentLength == 0) {
                         throw new IllegalArgumentException("Content-Length não especificado ou é zero.");
                     }
                     String requestBody = readRequestBody(contentLength);
+
+                    //transforma o corpo da requisicao em JSON
                     JsonObject jsonObject = JsonParser.parseString(requestBody).getAsJsonObject();
                     if (!jsonObject.has("cnpj")) {
                         throw new IllegalArgumentException("CNPJ não encontrado no corpo da requisição.");
                     }
 
+                    //Separa o campo CNPJ
                     String cnpj = jsonObject.get("cnpj").getAsString();
 
                     if (cnpj == null || cnpj.isEmpty() || cnpj.length()!=14) {

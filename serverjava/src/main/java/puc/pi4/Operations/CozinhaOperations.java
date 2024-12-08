@@ -19,26 +19,15 @@ public class CozinhaOperations {
     private MongoCollection<Document> collection;
     
     public CozinhaOperations(MongoDatabase database) throws IOException{
-
-        
-
-
-            // Conectando ao MongoDB Atlas
-            this.collection = database.getCollection("Cozinhas");
+        //Recebe a database mongo que veio do Serverjava->Controller onde essa classe foi instanciada.
+        this.collection = database.getCollection("Cozinhas");
 
      
     }
 
     public  List<Cozinha> getAllCozinhas() throws Exception {
-        System.out.println("Funcao buscar iniciada");
         List<Cozinha> cozinhas = new ArrayList<>();
-
-        
-
         for (Document doc : collection.find()) {
-
-            
-                
 
             @SuppressWarnings("unchecked")
             Cozinha cozinha = new Cozinha(doc.getString("nome"),
@@ -60,14 +49,11 @@ public class CozinhaOperations {
         return cozinhas;
     }
 
+
     public void addNotaCozinha(String cnpj, Double nota) throws Exception{
         Cozinha x = getCozinhaByCNPJ(cnpj);
-
         x.addNota(nota);
-
         updateCozinha(x, cnpj);
-
-
     }
 
     public Cozinha getCozinhaByCNPJ(String cnpj){
