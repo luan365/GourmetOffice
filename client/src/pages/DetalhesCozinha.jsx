@@ -7,6 +7,8 @@ import { useState, useEffect } from "react";
 export default function detalhesCozinha(){
   const { cnpj } = useParams();
   const [cozinha, setCozinha] = useState([]);
+  const [showInput, setShowInput] = useState(false);
+  const [nota, setNota] = useState("");
   async function getCozinhaByCNPJ() {
     try {
       // Chama a API para obter as cozinhas
@@ -30,7 +32,7 @@ export default function detalhesCozinha(){
 
 return (
     <div className="bg-gray-100 min-h-screen flex flex-col items-center py-10">
-      <div className="bg-purple-100 p-6 rounded-lg shadow-lg w-full max-w-md">
+      <div className="bg-purple-100 p-6 rounded-lg shadow-lg w-full max-w-md mb-6">
         <div className="flex flex-col items-center mb-6">
           <div className="mb-4">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-16 h-16 text-gray-500">
@@ -50,10 +52,6 @@ return (
             <span>{cozinha.email}</span>
           </div>
           <div className="flex justify-between">
-            <span className="font-semibold text-gray-600">Senha:</span>
-            <span>{cozinha.senha}</span>
-          </div>
-          <div className="flex justify-between">
             <span className="font-semibold text-gray-600">Telefone:</span>
             <span>{cozinha.telefone}</span>
           </div>
@@ -62,15 +60,37 @@ return (
             <span>{cozinha.endereco}</span>
           </div>
           <div className="flex justify-between" >
-            <span className="font-semibold text-gray-600">Descrição:</span>
-            <span>{cozinha.descricao}</span>
-          </div>
-          <div className="flex justify-between" >
             <span className="font-semibold text-gray-600">Estados atuantes:</span>
             <span>{Array.isArray(cozinha.estados) ? cozinha.estados.join(", ") : "Nenhum estado disponível"}</span>
           </div>
+          <div className="flex justify-between" >
+            <span className="font-semibold text-gray-600">Descrição:</span>
+            <span>{cozinha.descricao}</span>
+          </div>
+          <button
+            onClick={() => setShowInput(!showInput)} // Alterna a visibilidade
+            className="bg-gradient-to-r from-purple-500 to-purple-700 text-white py-3 px-8 rounded-full text-lg hover:bg-purple-600 transform transition-all duration-200"
+          >
+            Adicionar avaliação
+          </button>
         </div>
       </div>
+      {showInput && ( // Renderiza a segunda div apenas quando showInput for true
+      <div className="bg-purple-100 p-6 rounded-lg shadow-lg w-full max-w-md mb-6">
+
+            <input
+            type="text"
+            placeholder="Nota"
+            className="px-2 py-1 text-sm outline-black border-gray-300 bg-transparent"
+            value={nota}
+            onChange={(ev) => setNota(ev.target.value)}
+          />
+          <button className="bg-gradient-to-r from-purple-500 to-purple-700 text-white py-3 px-8 rounded-full text-lg hover:bg-purple-600 transform transition-all duration-200">
+            Inserir nota
+          </button>
+
+      </div>
+    )}
     </div>
   );
 }
